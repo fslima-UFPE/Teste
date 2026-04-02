@@ -22,9 +22,13 @@ author: Filipe Lima
 navbar-links:
   Grupo de Pesquisa: "LSI"
   Membros:
-    - Beautiful Jekyll: "https://beautifuljekyll.com"
-    - Learn markdown: "https://www.markdowntutorial.com/"
-  Ensino: "https://deanattali.com"
+    - Pesquisador Principal: "FSL"
+    - Pós-Graduandos: "PPG"
+    - Iniciação Científica: "IC"
+  Pesquisa: "Pesquisa"
+  Ensino:
+    - Termodinâmica Clássica: "TC"
+    - Termodinâmica Estatística: "TE"
 
 ################
 # --- Logo --- #
