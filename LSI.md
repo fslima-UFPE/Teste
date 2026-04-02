@@ -1,6 +1,6 @@
 ---
 layout: page
-title: About me
+title: O Grupo de Pesquisa
 subtitle: Why you'd want to go on a date with me
 ---
 
