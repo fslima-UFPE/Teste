@@ -10,6 +10,7 @@ subtitle: Regiões especiais do espaço
       img {
         display: block;
         margin: auto;
+        }
     </style>
   </head>
 </html>
