@@ -13,7 +13,7 @@ Interfaces são regiões no espaço que separam duas regiões distintas (fases).
 <p align="center">
   <img src="assets/img/air-water.jpg">
 </p>
-<p style="text-align: center;">
+<p align= "center">
 <b>Figura 1 - </b>A interface ar água vista de perto (Reprodução de P. Jungwirth, Nature, 168–169, 2011)
 </p>
 
