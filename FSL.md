@@ -4,14 +4,7 @@ title: Pesquisador Principal
 subtitle: Filipe Lima
 ---
 
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-}
-
-<img src="assets/img/rFSL.png" class="center">
+<img src="assets/img/rFSL.png">
 
 <p style="text-align: justify";>
 Possuo Bacharelado em Química pela Universidade de São Paulo (2004-2007), doutorado pela Universidade de São Paulo (2008-2013) e Pós-Doutorado pela Universidade de São Paulo (2013-2017). Realizei estágios durante o doutorado na Universidade de Coimbra (2009), trabalhando com polímeros e reologia, e na Universität Regensburg (2011), trabalhando com simulação computacional por Dinâmica Molecular e com espectroscopia de relaxação dielétrica em sistemas micelares. Realizei estágio durante o Pós-Doutorado na Princeton University, trabalhando com simulação computacional de Monte Carlo em sistemas coloidais.
