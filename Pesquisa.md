@@ -13,7 +13,7 @@ Interfaces são regiões no espaço que separam duas regiões distintas (fases).
   <img src="assets/img/air-water.jpg">
 </p>
 
-<b>Figura 1 - </b>A interface ar água vista de perto (Reprodução de P. Jungwirth, <i>Nature</i>, 168–169, <b>2011</b>)
+<b>Figura 1 - </b>A interface ar água vista de perto (Reprodução de P. Jungwirth, <i>Nature</i>, 168–169, <b>2011</b>).
 
 Uma vez que é a diferença de interação entre as moléculas e as duas (ou mais) fases que faz com que haja excesso (ou depleção) de moléculas nas interfaces, a natureza dessas interações é que determina as propriedades interfaciais. Assim, para diferentes interfaces, como a interface água/ar, óleo/água, entre tantas outras, a adsorção de moléculas varia drasticamente com a natureza das fases e dos solutos. Um grupo de interfaces de grande interesse industrial e biológico são as interfaces formadas pela associação de moléculas anfifílicas, como os surfactantes e os lipídeos.
 
@@ -23,10 +23,14 @@ Surfactantes são moléculas que possuem grupos hidrofílicos e uma cadeia hidro
   <img src="assets/img/micelle.jpg">
 </p>
 
+<b>Figura 2 - </b>Representação de uma micela esférica.
+
 Quando a molécula anfifílica possui duas cadeias hidrofóbicas, como os lipídeos, a afinidade do anfifílico por água é muito menor do que a afinidade entre moléculas de água. Assim, em água, lipídeos formam estruturas conhecidas como bicamadas, que são consideravelmente mais empacotadas do que micelas, isto é, há um contato muito menor entre cadeias hidrofóbicas e a água em bicamadas do que em micelas. Estas estruturas são de grande importância biológica, pois as membranas celulares são compostas por lipídeos, fazendo com que o estudo das propriedades de bicamadas seja fundamental. Estas estruturas também são importantes na industria de cosméticos e no design de novos sistema de entrega de fármacos.
 
 <p align="center">
   <img src="assets/img/bilayer.jpeg">
 </p>
+
+<b>Figura 3 - </b>Representação de uma bicamada lipídica.
 
 Em nosso grupo, estudamos propriedades fundamentais de diferentes interfaces, com o intuito de entender como as propriedades interfaciais e de agregados podem ser modulados. A determinação de tais parâmetros envolve a utilização de técnicas experimentais variadas, como a fluorescência, espalhamento de luz e calorimetria. Para que haja compreensão das propriedades dos sistemas no nível molecular, combinamos os resultados experimentais com modelagem computacional (Dinâmica Molecular ou Monte Carlo), fornecendo uma visão completa dos sistemas estudados. Por fim, a determinação das propriedades dos sistemas permite que novos sistemas aplicáveis, como rotas alternativas de nanopartículas, sejam desenvolvidos.
