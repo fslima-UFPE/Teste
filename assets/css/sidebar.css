@@ -5,11 +5,9 @@
   position: fixed;    /* Stay in place on scroll */
   left: 0;
   top: 0;
-  navbar-col: "#003366"
-  navbar-text-col: "#FFFFFF"
-  navbar-border-col: "#F5F5F5"
-/*  background-color: #333;*/
+  background-color: "#FFFFFF";
   padding-top: 50px;
+  marging-top: 100px;
 }
 
 /* Remove list bullets */
