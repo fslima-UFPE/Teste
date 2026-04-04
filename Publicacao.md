@@ -4,6 +4,7 @@ title: Publicações do LSI
 subtitle: Lista das publicações que envolvem membros e ex-membros do LSI
 ---
 
+30. MORTARA, LAURA ; CORTEZ, MATHEUS P. ; Lacerda, Caroline D. ; CARRETERO, GUSTAVO P. B. ; SCHREIER, SHIRLEY ; CHAIMOVICH, HERNAN ; Lima, Filipe S. ; CUCCOVIA, IOLANDA M. . Micellization of Zwitterionic Surfactant with Opposite Dipoles is Differently Affected by Anions. LANGMUIR, v. 41, p. 9480-9487, 2025
 
 
 29. PARK, PETER ; MATSUBARA, DANILO K. ; BARZOTTO, DOMENICO R. ; Lima, Filipe S. ; CHAIMOVICH, HERNAN ; MARRINK, SIEWERT J. ; CUCCOVIA, IOLANDA M. . Vesicle protrusion induced by antimicrobial peptides suggests common carpet mechanism for short antimicrobial peptides. Scientific Reports, v. 14, p. 14:9701, 2024.
