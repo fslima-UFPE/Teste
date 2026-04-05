@@ -22,9 +22,9 @@ author: Filipe Lima
 navbar-links:
   Pesquisa: "Pesquisa"
   Membros:
-    - Pesquisador Principal: "FSL"
-    - Pós-Graduandos: "PPG"
-    - Iniciação Científica: "IC"
+    - Pesquisador Principal: "Membros/FSL"
+    - Pós-Graduandos: "Membros/PPG"
+    - Iniciação Científica: "Membros/IC"
   Publicações: "Publicacao"
   Ensino:
     - Termodinâmica Clássica: "TC"
