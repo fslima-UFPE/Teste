@@ -27,9 +27,9 @@ navbar-links:
     - Iniciação Científica: "Membros/IC"
   Publicações: "Publicacao"
   Ensino:
-    - Termodinâmica Clássica: "TC"
+    - Termodinâmica Clássica: "Aulas/TC"
     - Termodinâmica Estatística: "Aulas/TE"
-    - Química Geral 1: "QG1"
+    - Química Geral 1: "Aulas/QG1"
 
 ################
 # --- Logo --- #
