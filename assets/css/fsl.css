@@ -37,6 +37,7 @@
 .eq-number {
   margin-left: 12px;
   font-weight: bold;
+  font-style: italic;
   color: #333;
   white-space: nowrap;
 }
