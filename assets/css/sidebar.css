@@ -1,11 +1,10 @@
 /* Sidebar Container */
 .side-nav {
-  height: 100%;       /* Full-height */
+  height: 90%;       /* Full-height */
   width: 120px;       /* Set a fixed width */
   position: fixed;    /* Stay in place on scroll */
   left: 0;
   top: 0px;
-  bottom: 100px;
   background-color: "#FFFFFF";
   border-right: 3px solid #333;
   overflow-y: auto;
