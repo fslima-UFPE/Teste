@@ -9,7 +9,7 @@
 /* Wrapper for mathbox + equation number */
 .mathbox-wrapper {
   display: flex;
-  align-items: flex-start;              /* vertically align box and number */
+  align-items: center;              /* vertically align box and number */
   justify-content: center;   /* box on left, number on right */
   margin: 4px 0;                /* vertical spacing (keep center alignment) */
   max-width: 800px;                 /* optional: limit max width */
