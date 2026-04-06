@@ -1,3 +1,5 @@
+/* shortcut to justify paragraphs*/
+
 .jt {
   text-align: justify;
   text-justify: inter-word;
@@ -62,6 +64,22 @@
 /* 2. Tighten internal MathJax layout */
 .mathbox .mjx-chtml {
   line-height: 1.4em !important;  
+}
+
+/* edit to include Tidal in SN */
+/* TIDAL icon inside Font Awesome stack */
+.tidal-icon {
+  width: 60%;              /* scale inside circle */
+  height: 60%;
+  object-fit: contain;
+
+  filter: grayscale(100%); /* default = grey */
+  transition: filter 0.3s ease;
+}
+
+/* Hover effect (matches typical FA behavior) */
+.list-inline-item a:hover .tidal-icon {
+  filter: grayscale(0%);   /* full color on hover */
 }
 
 /* 3. (Optional but safe) ensure compact rendering */
