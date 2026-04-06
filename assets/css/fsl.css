@@ -5,6 +5,16 @@
 
 /* ========================= */
 /* Boxed formulas “formula card” style */
+
+/* Wrapper for mathbox + equation number */
+.mathbox-wrapper {
+  display: flex;
+  align-items: center;              /* vertically align box and number */
+  justify-content: space-between;   /* box on left, number on right */
+  margin: 12px auto;                /* vertical spacing (keep center alignment) */
+  max-width: 800px;                 /* optional: limit max width */
+}
+
 .mathbox {
   background-color: #f0f0f0;       /* soft light grey background */
   border: 2px solid #888888;       /* medium grey border */
@@ -21,4 +31,18 @@
 .mathbox:hover {
   background-color: #e0e0e0;
   box-shadow: 3px 3px 8px rgba(0,0,0,0.2);
+}
+
+/* Equation number on the right */
+.eq-number {
+  margin-left: 12px;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+}
+
+/* Per-line highlight inside mathbox */
+.mathbox .highlighted-line {
+  color: #d12f2f;  /* change color as needed */
+  font-weight: bold; /* optional */
 }
