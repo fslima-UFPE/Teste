@@ -41,8 +41,7 @@
   font-weight: bold;
   font-style: italic;
   color: #d12f2f;
-  white-space: nowrap;
-  align-self: flex-start;
+  white-space: nowrap;  
 }
 
 /* Per-line highlight inside mathbox */
