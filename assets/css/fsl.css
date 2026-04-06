@@ -9,18 +9,18 @@
 /* Wrapper for mathbox + equation number */
 .mathbox-wrapper {
   display: flex;
-  align-items: flex-start;              /* vertically align box and number */
+  align-items: baseline;              /* vertically align box and number */
   justify-content: center;   /* box on left, number on right */
   margin: 6px 0;                /* vertical spacing (keep center alignment) */
   max-width: 800px;                 /* optional: limit max width */
-  gap: 6px;
+  gap: 20px;
 }
 
 .mathbox {
   background-color: #f0f0f0;       /* soft light grey background */
   border: 2px solid #888888;       /* medium grey border */
   border-radius: 12px;             /* smooth round corners */
-  padding: 6px 10px;              /* space inside the box */
+  padding: 4px 8px;              /* space inside the box */
   display: inline-block;            /* shrink box to formula width */
   margin: 0;                   /* vertical spacing between formulas */
   font-size: 1.15em;                /* slightly larger font for readability */
@@ -42,7 +42,7 @@
   font-style: italic;
   color: #d12f2f;
   white-space: nowrap;
-  align-self: flex-start;
+  align-self: baseline;
 }
 
 /* Per-line highlight inside mathbox */
@@ -57,4 +57,5 @@
   margin: 0;
   padding: 0;
   line-height: 1.1em;  /* tighter line spacing */
+  vertical-align: middle;
 }
