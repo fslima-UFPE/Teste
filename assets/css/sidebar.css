@@ -37,6 +37,6 @@
   margin-right: 150px;
 }
 
-footer {
-  margin-left: 120px;
+body.has-sidebar footer {
+  margin-left: 150px;
 }
