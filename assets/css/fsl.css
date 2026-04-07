@@ -70,3 +70,20 @@
 .mathbox mjx-container {
   padding: 0 !important;
 }
+
+/* sidebar for mobile*/
+@media (max-width: 768px) {
+  .side-nav {
+    display: none;
+  }
+
+  .content {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 10px;
+  }
+
+  footer {
+    margin-left: 0 !important;
+  }
+}
