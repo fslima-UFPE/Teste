@@ -100,15 +100,6 @@
   main.container-fluid {
     padding-top: 60px; /* adjust to your header height */
   }
-
-    /* Page title / header */
-  main.container-md h1,
-  main.container-fluid h1,
-  main.container-md .page-header,
-  main.container-fluid .page-header {
-    margin-top: 40px; /* push title down below header */
-  }
-  
 }
 
   /* images for phone */
