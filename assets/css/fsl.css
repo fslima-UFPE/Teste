@@ -1,5 +1,9 @@
-/* shortcut to justify paragraphs*/
+/*sidebar toggle off for desktop */
+#menu-toggle {
+  display: none;
+}
 
+/* shortcut to justify paragraphs*/
 .jt {
   text-align: justify;
   text-justify: inter-word;
@@ -109,11 +113,6 @@
     max-width: 100%;
     height: auto;
     }
-}
-
-/*sidebar toggle off for desktop */
-#menu-toggle {
-  display: none;
 }
 
 /* sidebar for phone */
