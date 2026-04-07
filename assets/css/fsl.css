@@ -70,27 +70,3 @@
 .mathbox mjx-container {
   padding: 0 !important;
 }
-
-/* edit to include Tidal in SN */
-/* TIDAL icon inside Font Awesome stack */
-.fa-stack {
-  position: relative;
-}
-
-.tidal-icon {
-  width: 60%;              /* scale inside circle */
-  height: 60%;
-  object-fit: contain;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  filter: grayscale(100%); /* default = grey */
-  transition: filter 0.3s ease;
-}
-
-/* Hover effect (matches typical FA behavior) */
-.list-inline-item a:hover .tidal-icon {
-  filter: grayscale(0%);   /* full color on hover */
-}
