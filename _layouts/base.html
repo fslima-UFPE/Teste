@@ -30,6 +30,23 @@ common-js:
   <title>{{ page.title | default: site.title }}</title>
   {% include head.html %}
 </head>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const sidebar = document.querySelector(".side-nav");
+
+  toggle.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+  });
+</script>
+
+<script>
+  document.querySelectorAll(".side-nav a").forEach(link => {
+    link.addEventListener("click", () => {
+      document.querySelector(".side-nav").classList.remove("active");
+    });
+  });
+</script>
   
 <body>
   <button id="menu-toggle">☰</button>
