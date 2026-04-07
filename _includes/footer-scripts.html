@@ -36,3 +36,25 @@
     <script src="{{ js | relative_url }}"></script>
   {% endfor %}
 {% endif %}
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggle = document.getElementById("menu-toggle");
+    const sidebar = document.querySelector(".side-nav");
+
+    // Only run if sidebar exists
+    if (sidebar && toggle) {
+      // Toggle sidebar
+      toggle.addEventListener("click", () => {
+        sidebar.classList.toggle("active");
+      });
+
+      // Close sidebar when any link inside is clicked
+      sidebar.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+          sidebar.classList.remove("active");
+        });
+      });
+    }
+  });
+</script>
