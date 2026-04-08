@@ -87,6 +87,25 @@
   margin: 0;
 }
 
+/* Keep equation + number aligned */
+.eq-with-img mjx-container {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Push number slightly right */
+.eq-with-img mjx-tag {
+  margin-left: 10px;
+}
+
+/* Image styling */
+.eq-with-img img {
+  height: 40px;
+  width: auto;
+  flex-shrink: 0;
+}
+
   /* equations for phone */
 @media (max-width: 768px) {
   .mathbox {
