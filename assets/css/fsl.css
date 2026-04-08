@@ -43,7 +43,7 @@
   display: flex;
   flex-direction: column;      /* stack vertically */
   justify-content: center;     /* center relative to the box */
-  margin-left: 30px;           /* space from the box */
+/*  margin-left: 30px;           /* space from the box */
 }
 
 .eq-numbers span {
@@ -72,6 +72,27 @@
 /* 3. (Optional but safe) ensure compact rendering */
 .mathbox mjx-container {
   padding: 0 !important;
+}
+
+/* NEW: container for numbers + image */
+.eq-side {
+  display: flex;
+  align-items: center;   /* vertically align with mathbox */
+  margin-left: 30px;     /* replaces old spacing */
+}
+
+/* keep your stacked numbers exactly as-is */
+.eq-numbers {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* image beside stacked numbers */
+.eq-side img {
+  height: 40px;
+  width: auto;
+  margin-left: 10px;
 }
 
   /* equations for phone */
