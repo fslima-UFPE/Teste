@@ -78,7 +78,7 @@
 .eq-side {
   display: flex;
   align-items: center;   /* vertically align with mathbox */
-  margin-left: 10px;     /* replaces old spacing */
+  margin-left: 0px;     /* replaces old spacing */
 }
 
 /* keep your stacked numbers exactly as-is */
