@@ -55,7 +55,8 @@
 }
 
 .side-nav:hover li a {
-  justify-content: flex-start;
+  white-space: normal;
+  text-align: center;
 }
 
 /* Hover effect */
@@ -90,7 +91,7 @@ body.has-sidebar footer {
 }
 
 .side-nav:hover li a .label {
-  display: inline;
+  display: inline-block;
   margin-left: 8px;
 }
 
