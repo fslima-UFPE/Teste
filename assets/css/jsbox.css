@@ -51,9 +51,3 @@
   border: 1px solid #ccc;
   border-radius: 8px;
 }
-
-/* Optional: style for vertex output */
-.vertex-output {
-  font-weight: bold;
-  color: #003366;
-}
