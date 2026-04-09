@@ -114,6 +114,10 @@
   .eq-numbers {
     margin-top: 5px;
   }
+
+  .mathbox .mjx-container {
+    max-width: 100%
+  }
 }
 
 /* text for phone */
