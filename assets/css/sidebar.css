@@ -10,6 +10,7 @@
   overflow-y: auto;
   transition: width 0.3s ease; /* smooth expand*/
   cursor: pointer;
+  overflow-x: hidden;
 }
 
 .side-nav:hover {
@@ -28,7 +29,7 @@
 /* Style the links */
 .side-nav li a {
   display: block;     /* Makes the whole area clickable */
-  width: 100%;
+  width: 150px;
   color: black;
   padding: 10px 15px;
   text-decoration: none;
@@ -37,20 +38,11 @@
   justify-content: center;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: hidden;
-}
-
-.side-nav li a span {
-  display: none;
+  text-overflow: ellipsis;
 }
 
 .side-nav:hover li a {
   justify-content: flex-start;
-}
-
-.side-nav:hover li a span {
-  display: inline;
-  margin-left: 10px;
 }
 
 /* Hover effect */
