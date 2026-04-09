@@ -21,3 +21,16 @@ Quadráticas são simples.
 Faça a sua abaixo:
 </p>
 
+{% include toolbox.html
+    title="Funções quadráticas"
+    subtitle="Mexe aí, vai"
+    interactive=true
+    interactive_id="quad1"
+    content="
+Considere esse aqui abaixo:
+
+$$ f(x) = ax^2 + bx + c $$
+
+Ajusta as barras aí para ver o que acontece:
+"
+%}
