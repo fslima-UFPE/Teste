@@ -29,60 +29,39 @@
 /* Style the links */
 .side-nav li a {
   display: block;     /* Makes the whole area clickable */
-  width: 150px;
+  width: %100;
   color: black;
   padding: 10px 15px;
   text-decoration: none;
   box-sizing: border-box;
-  overflow: visible;
+  overflow: hidden;
   text-align: center;
-  white-space: normal;
+  white-space: nowrap;  
+}
+
+/* Show only first letter in collapsed sidebar */
+.side-nav li a::first-letter {
+  display: inline-block;
+  font-weight: bold;
+}
+
+.side-nav:hover li a {
+  white-space: normal;      /* allow wrapping */
+  overflow: visible;        /* show full text */
+  text-align: center;       /* or left if you prefer */
   word-break: normal;
   overflow-wrap: break-word;
 }
 
-/* First letter always visible */
-.side-nav li a .initial {
-  display: inline-block;
-  width: 20px;
-  text-align: center;
-  font-weight: bold;
-}
-
-/* Hide rest of text when collapsed */
-.side-nav li a .label {
-  display: none;
-}
-
-.side-nav:hover li a {
-  /*white-space: normal;*/
-  display: block;
-  width: 100%;
-  color: black;
-  padding: 10px 15px;
-  text-decoration: none;
-  box-sizing: border-box;
-  text-align: center;
-  white-space: normal;
-  overflow: visible;
-  word-break: normal;
+/* Show full text in expanded mode */
+.side-nav:hover li a::first-letter {
+  display: inline;          /* restore normal text */
 }
 
 /* Hover effect */
 .side-nav li a:hover {
   background-color: #FA8072;
 }
-
-/* Offset main content so it doesn't overlap */
-/*.content {
-  margin-left: 60px;
-  margin-right: 150px;
-  transition: margin-left 0.3s ease;
-}*/
-/*
-.side-nav:hover ~ .content {
-  margin-left: 150px;
-}*/
 
 body.has-sidebar footer {
   margin-left: 60px;
@@ -91,17 +70,6 @@ body.has-sidebar footer {
 
 .side-nav:hover ~ footer {
   margin-left: 150px;
-}
-
-.side-nav li a .initial {
-  background-color: rgba(0,0,0,0.05);
-  /*border-radius: 4px;*/
-  /*padding: 2px 0;*/
-}
-
-.side-nav:hover li a .label {
-  display: inline-block;
-  /*margin-left: 8px;*/
 }
 
 .side-nav::after {
