@@ -119,18 +119,17 @@ body.has-sidebar footer {
 
   /* Hamburger button */
   #menu-toggle {
-    position: absolute;
-    top: 50px;
+    position: fixed;
+    top: 0px;
     left: 0px;
-    right: 50;
-    margin-right: 100px;
     z-index: 1100;
     background: #FF9164;
     color: black;
-    border: none;
+    border: 2px;
     padding: 10px 12px;
     font-size: 16px;
     border-radius: 6px;
+    border-color: #000000
     display: block;
   }
 }
