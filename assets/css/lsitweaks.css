@@ -26,6 +26,11 @@
   content: counter(h2counter) "." counter(h3counter) " ";
 }
 
+.aula-container h2::before,
+.aula-container h3::before {
+  display: inline-block;
+}
+
 
 /*sidebar toggle off for desktop */
 #menu-toggle {
