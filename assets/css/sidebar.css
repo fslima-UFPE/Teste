@@ -65,10 +65,10 @@ body.has-sidebar footer {
 .side-nav::after {
   content: "›";
   position: absolute;
-  right: 16px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 24px;
+  font-size: 32px;
   opacity: 0.8;
   font-weight: bold;
 }
@@ -76,10 +76,10 @@ body.has-sidebar footer {
 .side-nav:hover::after {
   content: "‹";
   position: absolute;
-  right: 16px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 24px;
+  font-size: 32px;
   opacity: 0.8;
   font-weight: bold;
 }
