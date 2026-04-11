@@ -9,6 +9,7 @@
   border-bottom: 2px solid #ddd;
   counter-increment: h2counter;
   counter-reset: h3counter;
+  color: red;
 }
 
 .aula-container h2::before {
