@@ -120,7 +120,7 @@ body.has-sidebar footer {
   /* Hamburger button */
   #menu-toggle {
     position: fixed;
-    top: 13px;
+    top: 50px;
     left: 0px;
     margin-right: 20px;
     z-index: 1100;
