@@ -141,8 +141,8 @@ body.has-sidebar footer {
   /* Hamburger button */
   #menu-toggle {
     position: fixed;
-    top: 90px;
-    left: 15px;
+    top: 250px;
+    left: 150px;
     z-index: 1100;
     background: #FF9164;
     color: #000000;
