@@ -17,15 +17,6 @@
   overflow-y: auto;
 }
 
-/* Remove list bullets */
-.side-nav ul {
-  list-style-type: none;
-  padding: 0;
-  padding-top: 90px;
-  padding-bottom: 50px;
-  margin: 0;  
-}
-
 /* Style the links */
 .side-nav li a {
   display: block;     /* Makes the whole area clickable */
@@ -39,13 +30,6 @@
   white-space: nowrap;  
 }
 
-.side-nav li a .text {
-  max-width: 2ch;
-  white-space: nowrap;
-  overflow: hidden;
-  display: inline-block;
-}
-
 .side-nav:hover li a {
   white-space: normal;      /* allow wrapping */
   overflow: visible;        /* show full text */
@@ -55,13 +39,6 @@
   color: rgba(0,0,0,1.0);
   width: 100%;
   display: inline;
-}
-
-.side-nav:hover li a .text {
-  display: block;
-  max-width: none;
-  white-space: normal;
-  overflow: visible;
 }
 
 /* Hover effect */
