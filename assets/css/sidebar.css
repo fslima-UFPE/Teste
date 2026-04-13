@@ -97,7 +97,6 @@ body.has-sidebar footer {
 
   /* Hide sidebar by default */
   .side-nav {
-    position: relative;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
     z-index: 1000;
@@ -128,7 +127,7 @@ body.has-sidebar footer {
 
   /* Hamburger button */
   #menu-toggle {
-    position: absolute;
+    position: fixed;
     top: 150px;
     left: 225px;
     z-index: 1100;
