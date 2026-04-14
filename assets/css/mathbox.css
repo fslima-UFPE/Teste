@@ -8,6 +8,7 @@
   justify-content: center;   /* box on left, number on right */
   margin: 4px 0;                /* vertical spacing (keep center alignment) */
   max-width: 800px;                 /* optional: limit max width */
+  scroll-margin-top: 90px;
 }
 
 .mathbox {
@@ -86,10 +87,6 @@
   flex-shrink: 0;
   align-self: center;
   display: block;
-}
-
-mjx-container, [id] {
-  scroll-margin-top: 90px;
 }
 
   /* equations for phone */
