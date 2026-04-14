@@ -88,6 +88,10 @@
   display: block;
 }
 
+mjx-container, [id] {
+  scroll-margin-top: 90px;
+}
+
   /* equations for phone */
 @media (max-width: 768px) {
   .mathbox {
