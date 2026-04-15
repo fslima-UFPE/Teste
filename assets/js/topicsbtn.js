@@ -17,4 +17,8 @@ $(document).ready(function() {
     }
   });
 
+  $(document).on("click", ".side-nav a", function() {
+  $(".side-nav").removeClass("active");
+});
+
 });
