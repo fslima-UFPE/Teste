@@ -33,6 +33,7 @@
     border: 2px solid black;
     font-size: 18px;
     margin-right: 10px;
+    margin-left: 10px;
     color: white;
   }
 }
@@ -41,13 +42,5 @@
   .navbar {
     display: flex;
     align-items: center;
-  }
-
-  .topics-btn {
-    margin-left: 10px;   
-    margin-right: auto;  
-    background: transparent;
-    border: none;
-    font-size: 18px;
   }
 }
