@@ -109,7 +109,7 @@
 
   mjx-container[jax="CHTML"][display="true"] {
   display: block;
-  overflow-x: auto !important;
+  overflow-x: auto;
   overflow-y: hidden;
   max-width: 100%;
   }
