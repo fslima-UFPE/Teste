@@ -113,4 +113,16 @@
   overflow-y: hidden;
   max-width: 100%;
   }
+
+  .eq-side {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .eq-side img {
+    max-width: 85%;
+    height: auto;
+    margin-left: 0;
+    margin-top: 15px;
+  }
 }
