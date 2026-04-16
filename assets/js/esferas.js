@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Verificação de Segurança: Só roda se estiver na página correta 
   const container = document.getElementById('esferas-tool');
   if (!container) return;
 
@@ -7,10 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
   let isCalculating = false;
   let frames = [];         
   let velocityData = [];   
+  let frequencyData = [];
   let histData = [];
 
   let theoreticalMeanV = 0;
   let velocityMaxY = 10;
+  let frequencyMaxY = 10; 
   let histConfig = { vmin: -10, vmax: 10, binWidth: 0.5, bins: 40 };
   let theoreticalCurve = [];
   let maxHistY = 1.0;
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let exactFrame = 0;
   let animId = null;
 
-  // Elementos DOM ( estudar mais sobre isso depois - zé)
+  // Elementos DOM
   const btnRun = document.getElementById('btn-run');
   const uiProgress = document.getElementById('ui-progress');
   const uiVis = document.getElementById('ui-visualization');
@@ -34,11 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const scrubber = document.getElementById('inp-scrubber');
   const svgHist = document.getElementById('svg-hist');
   const svgVel = document.getElementById('svg-vel');
-
-  // Parâmetros fixos
-  const PARAMS = {
-    edge: 70, dt: 0.005, r1: 0.5, m1: 50, n2: 0, r2: 0.5, m2: 10
-  };
+  const svgFreq = document.getElementById('svg-freq'); // Adicionado
 
   // --- UTILS ---
   function gaussian(a, b, v) { return a * Math.exp(-b*(v**2)); }
@@ -59,12 +56,12 @@ document.addEventListener('DOMContentLoaded', function() {
       this.radius = radius; this.mass = mass;
       this.x = x; this.y = y; this.vx = vx; this.vy = vy; this.color = color;
     }
-    advance(dt, edge) {
+    advance(dt, edge, simRef) {
       this.x += this.vx * dt; this.y += this.vy * dt;
-      if (this.x + this.radius >= edge) { this.x = edge - this.radius; this.vx *= -1; } 
-      if (this.x - this.radius <= 0) { this.x = this.radius; this.vx *= -1; }
-      if (this.y + this.radius >= edge) { this.y = edge - this.radius; this.vy *= -1; } 
-      if (this.y - this.radius <= 0) { this.y = this.radius; this.vy *= -1; }
+      if (this.x + this.radius >= edge) { this.x = edge - this.radius; this.vx *= -1; simRef.colisaoContador++; } 
+      if (this.x - this.radius <= 0) { this.x = this.radius; this.vx *= -1; simRef.colisaoContador++; }
+      if (this.y + this.radius >= edge) { this.y = edge - this.radius; this.vy *= -1; simRef.colisaoContador++; } 
+      if (this.y - this.radius <= 0) { this.y = this.radius; this.vy *= -1; simRef.colisaoContador++; }
     }
   }
 
@@ -74,21 +71,33 @@ document.addEventListener('DOMContentLoaded', function() {
     isCalculating = true;
     
     // Ler parâmetros da UI
-    const n1 = Number(document.getElementById('inp-n1').value);
-    const T = Number(document.getElementById('inp-T').value);
-    const steps = Number(document.getElementById('inp-steps').value);
+    const params = {
+      n1: Number(document.getElementById('inp-n1').value),
+      r1: Number(document.getElementById('inp-r1').value),
+      m1: Number(document.getElementById('inp-m1').value),
+      n2: Number(document.getElementById('inp-n2').value),
+      r2: Number(document.getElementById('inp-r2').value),
+      m2: Number(document.getElementById('inp-m2').value),
+      T: Number(document.getElementById('inp-T').value),
+      steps: Number(document.getElementById('inp-steps').value),
+      edge: Number(document.getElementById('inp-edge').value),
+      dt: Number(document.getElementById('inp-dt').value),
+      freqInterval: Number(document.getElementById('inp-freqInterval').value)
+    };
 
     btnRun.disabled = true;
     btnRun.innerText = "Calculando...";
     uiProgress.style.display = 'block';
     uiVis.style.display = 'none';
     
-    frames = []; velocityData = []; histData = [];
+    frames = []; velocityData = []; histData = []; 
+    frequencyData = [{ step: 0, count: 0 }]; 
+    
     await new Promise(r => setTimeout(r, 50)); 
     
     const particles = [];
     const k1 = 5.0;
-    const sigma1 = Math.sqrt(k1 * T / PARAMS.m1);
+    const sigma1 = Math.sqrt(k1 * params.T / params.m1);
     const b1 = 1 / (sigma1**2);
     theoreticalMeanV = Math.sqrt(Math.PI / b1) / 2;
     const a1 = Math.sqrt(b1 / Math.PI); 
@@ -114,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const placeParticles = (count, r, m, baseColor) => {
       let placed = 0; let attempts = 0;
       const maxAttempts = count * 2000;
-      const sigma = Math.sqrt(k1 * T / m);
+      const sigma = Math.sqrt(k1 * params.T / m);
       const b = 1 / (sigma**2);
       const a = Math.sqrt(b/Math.PI);
       const vmax = 3*sigma; const vmin = -vmax;
@@ -129,8 +138,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       while (placed < count && attempts < maxAttempts) {
         attempts++;
-        const x = Math.random() * (PARAMS.edge - 2*r) + r;
-        const y = Math.random() * (PARAMS.edge - 2*r) + r;
+        const x = Math.random() * (params.edge - 2*r) + r;
+        const y = Math.random() * (params.edge - 2*r) + r;
         
         let overlap = false;
         for (let p of particles) {
@@ -154,11 +163,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     };
 
-    placeParticles(n1, PARAMS.r1, PARAMS.m1, '#4caf50');
-    const chunkSize = 100; 
+    placeParticles(params.n1, params.r1, params.m1, '#4caf50');
+    placeParticles(params.n2, params.r2, params.m2, '#dc3545');
 
-    for (let step = 0; step < steps; step++) {
-      for (let p of particles) p.advance(PARAMS.dt, PARAMS.edge);
+    const chunkSize = 100; 
+    let lastCollisionCount = 0;
+    const simObj = { colisaoContador: 0 }; 
+
+    for (let step = 0; step < params.steps; step++) {
+      for (let p of particles) p.advance(params.dt, params.edge, simObj);
       
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -192,9 +205,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
       
-      const stride = Math.max(1, Math.floor(steps / 1000));
+      const stride = Math.max(1, Math.floor(params.steps / 1000));
       
-      if (step % stride === 0 || step === steps - 1) {
+      if (step % stride === 0 || step === params.steps - 1) {
         frames.push(particles.map(p => ({ x: p.x, y: p.y, r: p.radius, c: getSpeedColor(p.vx, p.vy, histConfig.vmax) })));
         const totalSpeed = particles.reduce((acc, p) => acc + Math.hypot(p.vx, p.vy), 0);
         velocityData.push({ step, sim: totalSpeed / particles.length, theo: theoreticalMeanV });
@@ -202,10 +215,12 @@ document.addEventListener('DOMContentLoaded', function() {
         let instBins = new Array(histConfig.bins).fill(0);
         let instTotal = 0;
         for (let p of particles) {
-          let bx = Math.floor((p.vx - histConfig.vmin) / histConfig.binWidth);
-          let by = Math.floor((p.vy - histConfig.vmin) / histConfig.binWidth);
-          if (bx >= 0 && bx < histConfig.bins) { instBins[bx]++; runningBins[bx]++; instTotal++; runningTotal++; }
-          if (by >= 0 && by < histConfig.bins) { instBins[by]++; runningBins[by]++; instTotal++; runningTotal++; }
+          if (p.mass === params.m1) {
+            let bx = Math.floor((p.vx - histConfig.vmin) / histConfig.binWidth);
+            let by = Math.floor((p.vy - histConfig.vmin) / histConfig.binWidth);
+            if (bx >= 0 && bx < histConfig.bins) { instBins[bx]++; runningBins[bx]++; instTotal++; runningTotal++; }
+            if (by >= 0 && by < histConfig.bins) { instBins[by]++; runningBins[by]++; instTotal++; runningTotal++; }
+          }
         }
         histData.push({ 
           inst: instBins.map(c => c / (instTotal * histConfig.binWidth || 1)), 
@@ -213,8 +228,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
 
+      // Regista colisões a cada intervalo
+      if (step > 0 && step % params.freqInterval === 0) {
+        frequencyData.push({ step, count: simObj.colisaoContador - lastCollisionCount });
+        lastCollisionCount = simObj.colisaoContador;
+      }
+
       if (step % chunkSize === 0) {
-        const p = (step / steps) * 100;
+        const p = (step / params.steps) * 100;
         progText.innerText = `Progresso: ${p.toFixed(1)}%`;
         await new Promise(r => setTimeout(r, 0));
       }
@@ -223,10 +244,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const maxSimV = Math.max(...velocityData.map(d => d.sim));
     const maxTheoV = Math.max(...velocityData.map(d => d.theo));
     velocityMaxY = Math.max(maxSimV, maxTheoV) * 1.1; 
+    
+    const maxFreq = frequencyData.length > 1 ? Math.max(...frequencyData.map(d => d.count)) : 0;
+    frequencyMaxY = maxFreq > 0 ? maxFreq * 1.1 : 10;
 
     isCalculating = false;
     btnRun.disabled = false;
-    btnRun.innerText = "Atualizar";
+    btnRun.innerText = "Atualizar Simulação";
     uiProgress.style.display = 'none';
     uiVis.style.display = 'flex';
     
@@ -241,20 +265,23 @@ document.addEventListener('DOMContentLoaded', function() {
   // --- DESENHO E ANIMAÇÃO ---
   function drawFrame(idx) {
     if (!frames[idx]) return;
-    const scale = canvas.width / PARAMS.edge;
+    const edge = Number(document.getElementById('inp-edge').value);
+    const scale = canvas.width / edge;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (let p of frames[idx]) {
+      const drawRadius = p.r === 0 ? 0.5 : p.r;
       ctx.beginPath();
-      ctx.arc(p.x * scale, (PARAMS.edge - p.y) * scale, p.r * scale, 0, Math.PI * 2);
+      ctx.arc(p.x * scale, (edge - p.y) * scale, drawRadius * scale, 0, Math.PI * 2);
       ctx.fillStyle = p.c; ctx.fill();
       ctx.lineWidth = 0.5; ctx.strokeStyle = '#333'; ctx.stroke();
     }
   }
 
   function playLoop() {
+    const scaleV = document.getElementById('inp-scaleV').checked;
     const T = Number(document.getElementById('inp-T').value);
-    const speedFactor = Math.sqrt(Math.max(1, T) / 1000); // Visual scaling
+    const speedFactor = scaleV ? Math.sqrt(Math.max(1, T) / 1000) : 1.0;
 
     if (exactFrame < frames.length - 1) {
       exactFrame += speedFactor;
@@ -266,10 +293,16 @@ document.addEventListener('DOMContentLoaded', function() {
       updateCharts(currentFrameIdx);
       
       if (isPlaying) animId = requestAnimationFrame(playLoop);
-      else btnPlay.innerText = 'Reproduzir';
+      else {
+        btnPlay.innerText = 'Reproduzir';
+        btnPlay.classList.remove('jsbox-btn-warning');
+        btnPlay.classList.add('jsbox-btn-success');
+      }
     } else {
       isPlaying = false;
       btnPlay.innerText = 'Reproduzir';
+      btnPlay.classList.remove('jsbox-btn-warning');
+      btnPlay.classList.add('jsbox-btn-success');
     }
   }
 
@@ -278,11 +311,13 @@ document.addEventListener('DOMContentLoaded', function() {
       cancelAnimationFrame(animId);
       isPlaying = false;
       btnPlay.innerText = 'Reproduzir';
-      btnPlay.style.backgroundColor = '#28a745';
+      btnPlay.classList.remove('jsbox-btn-warning');
+      btnPlay.classList.add('jsbox-btn-success');
     } else {
       isPlaying = true;
       btnPlay.innerText = 'Pausar';
-      btnPlay.style.backgroundColor = '#ffc107';
+      btnPlay.classList.remove('jsbox-btn-success');
+      btnPlay.classList.add('jsbox-btn-warning');
       if (currentFrameIdx >= frames.length - 1) { currentFrameIdx = 0; exactFrame = 0; }
       else { exactFrame = currentFrameIdx; }
       playLoop();
@@ -300,6 +335,8 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateCharts(fIdx) {
     const curHist = histData[fIdx] || { cum: [], inst: [] };
     const curVel = velocityData.slice(0, fIdx + 1);
+    const curStep = velocityData[fIdx]?.step || 0;
+    const curFreq = frequencyData.filter(d => d.step <= curStep);
     const steps = Number(document.getElementById('inp-steps').value);
 
     // 1. HISTOGRAMA
@@ -313,9 +350,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const getHistY = d => 260 - (d / maxHistY) * 220;
     const getHistH = d => (d / maxHistY) * 220;
 
+    // Azul transparente para a Média (Acumulado)
     curHist.cum.forEach((dens, i) => {
-      histHTML += `<rect x="${getHistX(i)}" y="${getHistY(dens)}" width="${histW}" height="${getHistH(dens)}" fill="#003366" opacity="0.4" />`;
+      histHTML += `<rect x="${getHistX(i)}" y="${getHistY(dens)}" width="${histW}" height="${getHistH(dens)}" fill="#2196f3" opacity="0.5" />`;
     });
+    // Laranja sem fundo para o Instantâneo
     curHist.inst.forEach((dens, i) => {
       histHTML += `<rect x="${getHistX(i)}" y="${getHistY(dens)}" width="${histW}" height="${getHistH(dens)}" fill="none" stroke="#ff9800" stroke-width="2" opacity="0.9" />`;
     });
@@ -326,41 +365,51 @@ document.addEventListener('DOMContentLoaded', function() {
       let y = 260 - (pt.dens / maxHistY) * 220;
       theoPath += (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
     });
+    // Verde para a curva teórica
     histHTML += `<path d="${theoPath}" fill="none" stroke="#28a745" stroke-width="2" />`;
     svgHist.innerHTML = histHTML;
 
-    // 2. VELOCIDADE
-    let velHTML = `
-      <line x1="60" y1="300" x2="600" y2="300" stroke="#ccc" />
-      <line x1="60" y1="300" x2="60" y2="20" stroke="#ccc" />
-      <text x="55" y="25" text-anchor="end" font-size="12" fill="#555">${velocityMaxY.toFixed(2)}</text>
-      <text x="55" y="300" text-anchor="end" font-size="12" fill="#555">0</text>
-      <text x="30" y="160" text-anchor="middle" transform="rotate(-90, 30, 160)" font-size="12" fill="#888">Velocidade</text>
-    `;
-    for (let i = 0; i <= 5; i++) {
-      let x = 60 + (i / 5) * 540;
-      velHTML += `<line x1="${x}" y1="300" x2="${x}" y2="305" stroke="#aaa" />
-                  <text x="${x}" y="320" text-anchor="middle" font-size="11" fill="#666">${Math.round((steps/5)*i)}</text>`;
-    }
+    // FUNÇÃO AUXILIAR PARA EIXOS
+    const drawAxes = (labelY, maxY) => {
+      let html = `
+        <line x1="60" y1="300" x2="600" y2="300" stroke="#ccc" />
+        <line x1="60" y1="300" x2="60" y2="20" stroke="#ccc" />
+        <text x="55" y="25" text-anchor="end" font-size="12" fill="#555">${maxY.toFixed(labelY === 'Velocidade' ? 2 : 0)}</text>
+        <text x="55" y="300" text-anchor="end" font-size="12" fill="#555">0</text>
+        <text x="30" y="160" text-anchor="middle" transform="rotate(-90, 30, 160)" font-size="12" fill="#888">${labelY}</text>
+      `;
+      for (let i = 0; i <= 5; i++) {
+        let x = 60 + (i / 5) * 540;
+        html += `<line x1="${x}" y1="300" x2="${x}" y2="305" stroke="#aaa" />
+                 <text x="${x}" y="320" text-anchor="middle" font-size="11" fill="#666">${Math.round((steps/5)*i)}</text>`;
+      }
+      return html;
+    };
 
-    const createPathStr = (data, getKeyY) => {
-      if (!data.length) return "";
-      let d = `M 60 ${300 - (getKeyY(data[0]) / velocityMaxY) * 280}`;
+    const createPathStr = (data, getKeyY, maxYRef) => {
+      if (!data || !data.length) return "";
+      let d = `M 60 ${300 - (getKeyY(data[0]) / maxYRef) * 280}`;
       for (let point of data) {
-        d += ` L ${60 + (point.step / steps) * 540} ${300 - (getKeyY(point) / velocityMaxY) * 280}`;
+        d += ` L ${60 + (point.step / steps) * 540} ${300 - (getKeyY(point) / maxYRef) * 280}`;
       }
       return d;
     };
 
-    velHTML += `<path d="${createPathStr(velocityData, d=>d.theo)}" fill="none" stroke="#28a745" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>`;
-    velHTML += `<path d="${createPathStr(curVel, d=>d.sim)}" fill="none" stroke="#003366" stroke-width="2" />`;
+    // 2. VELOCIDADE
+    let velHTML = drawAxes('Velocidade', velocityMaxY);
+    velHTML += `<path d="${createPathStr(velocityData, d=>d.theo, velocityMaxY)}" fill="none" stroke="#28a745" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>`;
+    velHTML += `<path d="${createPathStr(curVel, d=>d.sim, velocityMaxY)}" fill="none" stroke="#003366" stroke-width="2" />`;
     
     let theoYPos = 300 - (theoreticalMeanV / velocityMaxY) * 280;
     velHTML += `<text x="55" y="${theoYPos + 4}" text-anchor="end" font-size="12" fill="#28a745" font-weight="bold">${theoreticalMeanV.toFixed(2)}</text>
                 <line x1="55" y1="${theoYPos}" x2="60" y2="${theoYPos}" stroke="#28a745" stroke-width="2" />`;
     svgVel.innerHTML = velHTML;
+
+    // 3. FREQUÊNCIA DE COLISÕES
+    let freqHTML = drawAxes('Colisões / int.', frequencyMaxY);
+    freqHTML += `<path d="${createPathStr(curFreq, d=>d.count, frequencyMaxY)}" fill="none" stroke="#ff9800" stroke-width="2" />`;
+    svgFreq.innerHTML = freqHTML;
   }
 
   btnRun.addEventListener('click', runSimulation);
-
 });
