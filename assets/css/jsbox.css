@@ -30,6 +30,33 @@
   text-align: center;
 }
 
+/* stop counting inside toolbox */
+.aula-container > h2 {
+  counter-increment: h2counter;
+}
+
+.aula-container > h2::before {
+  content: counter(h2counter) ".";
+}
+
+.aula-container > h3 {
+  counter-increment: h3counter;
+}
+
+.aula-container > h3::before {
+  content: counter(h2counter) "." counter(h3counter) ".";
+}
+
+.toolbox h2::before,
+.toolbox h3::before {
+  content: none;
+}
+
+.toolbox h2,
+.toolbox h3 {
+  counter-increment: none;
+}
+
 /* Content */
 .toolbox-content {
   line-height: 1.6;
