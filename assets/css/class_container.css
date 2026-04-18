@@ -54,3 +54,14 @@
 .jt {
   text-align: left;
 }
+
+/* stop counting inside toolbox */
+.toolbox h2,
+.toolbox h3 {
+  counter-increment: none;
+}
+
+.toolbox h2::before,
+.toolbox h3::before {
+  content: none;
+}
