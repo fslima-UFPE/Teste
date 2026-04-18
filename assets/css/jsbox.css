@@ -13,8 +13,8 @@
   display: flow-root;
 }
 
-.toolbox {
-  outline: 3px solid red;
+.aula-container .toolbox .toolbox-header h2 {
+  margin-top: 0;
 }
 
 .toolbox > *:first-child {
