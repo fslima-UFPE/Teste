@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
         frequencyData.push({ step, count: simObj.colisaoContador - lastCollisionCount });
         lastCollisionCount = simObj.colisaoContador;
       }
-
+      // Cálulo do Progresso
       if (step % chunkSize === 0) {
         const p = (step / params.steps) * 100;
         progText.innerText = `Progresso: ${p.toFixed(1)}%`;
@@ -270,15 +270,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const inpN = document.getElementById('inp-n1');
     const inpT = document.getElementById('inp-T');
     const inpM = document.getElementById('inp-m1');
+    const inpL = document.getElementById('inp-edge');
     
     const currentN = inpN ? inpN.value : '?';
     const currentT = inpT ? inpT.value : '?';
     const currentM = inpM ? inpM.value : '?';
+    const currentL = inpL ? inpL.value : '?';
 
     simulationHistory.unshift({
       n: currentN,
       t: currentT,
       m: currentM,
+      l: currentL,
       f: isNaN(avg) ? '--' : avg.toFixed(2)
     });
 
@@ -291,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <span style="color: ${index === 0 ? '#ff9800' : '#888'}; font-weight: bold;">
             ${index === 0 ? 'ATUAL' : 'Anterior'}
           </span>: 
-          N=${sim.n}, T=${sim.t}, m=${sim.m} &rarr; <b>f=${sim.f}</b>
+          N=${sim.n}, T=${sim.t}, m=${sim.m}, L=${sim.l} &rarr; <b>f=${sim.f}</b>
         </div>
       `).join('');
     }
