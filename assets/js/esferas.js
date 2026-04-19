@@ -260,6 +260,31 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('val-avg-freq').innerText = avg.toFixed(2);
     }
 
+    // --- LÓGICA DO HISTÓRICO DE FREQUENCIAS---
+    const currentN = document.getElementById('inp-n1').value;
+    const currentT = document.getElementById('inp-T').value;
+    const currentM = document.getElementById('inp-m1').value;
+
+    simulationHistory.unshift({
+      n: currentN,
+      t: currentT,
+      m: currentM,
+      f: avg.toFixed(2)
+    });
+
+    if (simulationHistory.length > 3) simulationHistory.pop();
+
+    // Atualiza a interface
+    const historyContainer = document.getElementById('history-box-content');
+    historyContainer.innerHTML = simulationHistory.map((sim, index) => `
+      <div style="font-size: 0.85em; border-bottom: ${index === simulationHistory.length - 1 ? 'none' : '1px solid #eee'}; padding: 4px 0;">
+        <span style="color: ${index === 0 ? '#ff9800' : '#888'}; font-weight: bold;">
+          ${index === 0 ? 'ATUAL' : 'Anterior'}
+        </span>: 
+        N=${sim.n}, T=${sim.t}, m=${sim.m} → <b>f=${sim.f}</b>
+      </div>
+    `).join('');
+    
     isCalculating = false;
     btnRun.disabled = false;
     btnRun.innerText = "Atualizar Simulação";
