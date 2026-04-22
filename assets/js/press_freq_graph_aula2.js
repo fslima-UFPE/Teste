@@ -7,6 +7,7 @@ function iniciarLaboratorioGraficos() {
     if (!selVar || !btnPlot) return; 
 
     console.log("Laboratório de Gráficos (Aula 2) detectado e iniciado!");
+
     const K1 = 2.54;
     const K2 = 6.46;
 
@@ -95,16 +96,15 @@ function iniciarLaboratorioGraficos() {
             let T = (v === 'T') ? xVal : bT;
             let m = (v === 'm') ? xVal : bm;
 
-            
             let f = K1 * (N / L) * Math.sqrt(T / m);
             let P = K2 * (N * T) / (L * L); 
 
-          
+            // Guarda formatado com 2 casas decimais
             eixoFreq.push(f.toFixed(2));
             eixoPressao.push(P.toFixed(2));
         }
 
-      
+        //desenhar os gráficos
         desenharGraficoFreq(eixoX, eixoFreq, v);
         desenharGraficoPressao(eixoX, eixoPressao, v);
     });
@@ -113,16 +113,19 @@ function iniciarLaboratorioGraficos() {
         const ctx = document.getElementById('chart-freq').getContext('2d');
         if (chartFreqInstance) chartFreqInstance.destroy();
 
-       
-        const dadosReais = xData.map((xVal, index) => ({ x: xVal, y: parseFloat(yData[index]) }));
+        // Garante que ambos são números para o plano cartesiano
+        const dadosReais = xData.map((xVal, index) => ({ 
+            x: parseFloat(xVal), 
+            y: parseFloat(yData[index]) 
+        }));
 
         chartFreqInstance = new Chart(ctx, {
-            type: 'line',
+            type: 'scatter', 
             data: {
-                
                 datasets: [{
                     label: 'Frequência (f)',
                     data: dadosReais,
+                    showLine: true,  
                     borderColor: '#003366',
                     backgroundColor: 'rgba(0, 51, 102, 0.1)',
                     borderWidth: 3, 
@@ -136,10 +139,12 @@ function iniciarLaboratorioGraficos() {
                 maintainAspectRatio: false,
                 scales: {
                     x: { 
-                        type: 'linear', /
+                        type: 'linear', 
                         title: { display: true, text: `Variável ${labelX}` } 
                     },
-                    y: { title: { display: true, text: 'Frequência' } }
+                    y: { 
+                        title: { display: true, text: 'Frequência' } 
+                    }
                 }
             }
         });
@@ -149,15 +154,18 @@ function iniciarLaboratorioGraficos() {
         const ctx = document.getElementById('chart-press').getContext('2d');
         if (chartPressInstance) chartPressInstance.destroy();
 
-
-        const dadosReais = xData.map((xVal, index) => ({ x: xVal, y: parseFloat(yData[index]) }));
+        const dadosReais = xData.map((xVal, index) => ({ 
+            x: parseFloat(xVal), 
+            y: parseFloat(yData[index]) 
+        }));
 
         chartPressInstance = new Chart(ctx, {
-            type: 'line',
+            type: 'scatter', 
             data: {
                 datasets: [{
                     label: 'Pressão (P)',
                     data: dadosReais,
+                    showLine: true,  
                     borderColor: '#d9534f',
                     backgroundColor: 'rgba(217, 83, 79, 0.1)',
                     borderWidth: 3, 
@@ -174,12 +182,15 @@ function iniciarLaboratorioGraficos() {
                         type: 'linear', 
                         title: { display: true, text: `Variável ${labelX}` } 
                     },
-                    y: { title: { display: true, text: 'Pressão' } }
+                    y: { 
+                        title: { display: true, text: 'Pressão' } 
+                    }
                 }
             }
         });
     }
-    
+
+    // Desenha automaticamente ao abrir
     setTimeout(() => { 
         if(btnPlot) btnPlot.click(); 
     }, 500); 
@@ -188,6 +199,5 @@ function iniciarLaboratorioGraficos() {
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', iniciarLaboratorioGraficos);
 } else {
-    // Se a página já estiver montada quando este script chegar, executa na hora
     iniciarLaboratorioGraficos();
 }
