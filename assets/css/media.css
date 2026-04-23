@@ -69,3 +69,14 @@
     margin-left: auto;   /* push right */
   }
 }
+
+@media (max-width: 768px) {
+  .navbar-toggler,
+  .topics-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: auto;
+  }
+}
