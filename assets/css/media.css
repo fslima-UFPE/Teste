@@ -42,6 +42,28 @@
 @media (max-width: 768px) {
   .navbar {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
   }
+}
+
+@media (max-width: 768px) {
+  .navbar-brand {
+    width: 100%;       /* takes entire first line */
+    text-align: center; /* optional, looks better */
+  }
+}
+
+@media (max-width: 768px) {
+
+  .navbar-toggler {
+    order: 2;
+    margin-right: auto;  /* push left */
+  }
+
+  .topics-btn {
+    order: 3;
+    margin-left: auto;   /* push right */
+  }
+
 }
