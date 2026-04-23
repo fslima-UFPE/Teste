@@ -36,6 +36,7 @@
   flex-direction: column;      /* stack vertically */
   justify-content: center;     /* center relative to the box */
   margin-left: 30px;           /* space from the box */
+  flex-shrink: 0;
 }
 
 .eq-numbers span {
@@ -71,6 +72,7 @@
   display: flex;
   align-items: center;   /* vertically align with mathbox */
   margin-left: 0px;     /* replaces old spacing */
+  gap: 20px;
 }
 
 /* keep your stacked numbers exactly as-is */
@@ -78,14 +80,14 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 /* image beside stacked numbers */
 .eq-side img {
   height: 300px;
   width: auto;
-  margin-left: 50px;
-  flex-shrink: 0;
+  flex-shrink: 1;
   align-self: center;
   display: block;
 }
