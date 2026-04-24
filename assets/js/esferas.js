@@ -70,11 +70,15 @@ document.addEventListener('DOMContentLoaded', function() {
   async function runSimulation() {
     if (isCalculating) return;
     isCalculating = true;
-    
+
+    // Verifica se o input do Sigma existe no HTML atual
+    const inputSigma = document.getElementById('inp-sigma');
+    const sigma = inputSigma ? parseFloat(inputSigma.value) : null;
     // Ler parâmetros da UI
     const params = {
       n1: Number(document.getElementById('inp-n1').value),
-      r1: Number(document.getElementById('inp-r1').value),
+      // Se o sigma existir, o raio 1 é sigma/2. Se não, lê o inp-r1 default do html
+      r1: sigma !== null ? (sigma / 2.0) : Number(document.getElementById('inp-r1').value),
       m1: Number(document.getElementById('inp-m1').value),
       n2: Number(document.getElementById('inp-n2').value),
       r2: Number(document.getElementById('inp-r2').value),
@@ -250,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
     frequencyMaxY = maxFreq > 0 ? maxFreq * 1.1 : 10;
 
     // --- CÁLCULO DA MÉDIA DOS 80% FINAIS ---
-    let avg = 0; 
+ let avg = 0; 
     
     if (frequencyData && frequencyData.length > 5) {
       const startIdx = Math.floor(frequencyData.length * 0.2);
@@ -271,17 +275,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const inpT = document.getElementById('inp-T');
     const inpM = document.getElementById('inp-m1');
     const inpL = document.getElementById('inp-edge');
+    const inpSigma = document.getElementById('inp-sigma');
     
     const currentN = inpN ? inpN.value : '?';
     const currentT = inpT ? inpT.value : '?';
     const currentM = inpM ? inpM.value : '?';
     const currentL = inpL ? inpL.value : '?';
+    // Guarda o valor de sigma se existir, senão fica null
+    const currentSigma = inpSigma ? inpSigma.value : null;
 
     simulationHistory.unshift({
       n: currentN,
       t: currentT,
       m: currentM,
       l: currentL,
+      sigma: currentSigma,
       f: isNaN(avg) ? '--' : avg.toFixed(2)
     });
 
@@ -289,14 +297,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const historyContainer = document.getElementById('history-box-content');
     if (historyContainer) {
-      historyContainer.innerHTML = simulationHistory.map((sim, index) => `
+      historyContainer.innerHTML = simulationHistory.map((sim, index) => {
+        
+        // Diferenciar texto da Aula 2 pra Aula 5
+        let parametrosTexto = `N=${sim.n}, T=${sim.t}, m=${sim.m}, L=${sim.l}`;
+        if (sim.sigma !== null) {
+            parametrosTexto += `, &sigma;=${sim.sigma}`;
+        }
+
+        return `
         <div style="font-size: 0.85em; border-bottom: ${index === simulationHistory.length - 1 ? 'none' : '1px solid #eee'}; padding: 4px 0;">
           <span style="color: ${index === 0 ? '#ff9800' : '#888'}; font-weight: bold;">
             ${index === 0 ? 'ATUAL' : 'Anterior'}
           </span>: 
-          N=${sim.n}, T=${sim.t}, m=${sim.m}, L=${sim.l} &rarr; <b>f=${sim.f}</b>
+          ${parametrosTexto} &rarr; <b>f=${sim.f}</b>
         </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     isCalculating = false;
