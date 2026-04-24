@@ -1,5 +1,5 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const container = document.getElementById('esferas-tool');
+// Procura pelo ID da Aula 2 OU pelo ID da Aula 5
+  const container = document.getElementById('esferas-tool') || document.getElementById('potenciais-tool');
   if (!container) return;
 
   // --- VARIÁVEIS GLOBAIS E ESTADO ---
@@ -433,8 +433,8 @@ document.addEventListener('DOMContentLoaded', function() {
       theoPath += (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
     });
     histHTML += `<path d="${theoPath}" fill="none" stroke="#28a745" stroke-width="2" />`;
-    svgHist.innerHTML = histHTML;
-
+    if (svgHist) { svgHist.innerHTML = histHTML; }
+    
     // FUNÇÃO AUXILIAR PARA EIXOS
     const drawAxes = (labelY, maxY) => {
       let html = `
@@ -469,12 +469,12 @@ document.addEventListener('DOMContentLoaded', function() {
     let theoYPos = 300 - (theoreticalMeanV / velocityMaxY) * 280;
     velHTML += `<text x="55" y="${theoYPos + 4}" text-anchor="end" font-size="12" fill="#28a745" font-weight="bold">${theoreticalMeanV.toFixed(2)}</text>
                 <line x1="55" y1="${theoYPos}" x2="60" y2="${theoYPos}" stroke="#28a745" stroke-width="2" />`;
-    svgVel.innerHTML = velHTML;
+    if (svgVel) { svgVel.innerHTML = velHTML; }
 
     // 3. FREQUÊNCIA DE COLISÕES
     let freqHTML = drawAxes('Colisões / int.', frequencyMaxY);
     freqHTML += `<path d="${createPathStr(curFreq, d=>d.count, frequencyMaxY)}" fill="none" stroke="#ff9800" stroke-width="2" />`;
-    svgFreq.innerHTML = freqHTML;
+    if (svgFreq) { svgFreq.innerHTML = freqHTML; };
   }
 
   btnRun.addEventListener('click', runSimulation);
