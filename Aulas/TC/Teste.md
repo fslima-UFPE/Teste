@@ -77,7 +77,6 @@ Vou ver se funciona.
           <div class="jsbox-card-header">Particles</div>
           <div class="jsbox-card-body">
 
-            <!-- ✅ FIXED: container added -->
             <div class="jsbox-canvas-container">
               <canvas width="300" height="300"></canvas>
             </div>
