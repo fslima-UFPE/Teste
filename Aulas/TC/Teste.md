@@ -15,7 +15,19 @@ Vou ver se funciona.
   </div>
 
   <div class="toolbox-content">
-
+    <div class="jsbox-input-row">
+      <label>Particle</label>
+      <select class="jsbox-input" id="ptype">
+        <option>Xe</option>
+        <option>Ar</option>
+        <option>Ne</option>
+        <option>He</option>
+        <option>Kr</option>
+        <option>HS</option>
+        <option>IG</option>
+      </select>
+    </div>
+    
     <!-- Controls -->
     <div class="jsbox-control-panel">
       <div class="jsbox-controls-grid">
