@@ -30,12 +30,12 @@ function createMCSimulation(box) {
 
     const histChart = new Chart(box.querySelector("#histChart"), {
         type: "bar",
-        data: { labels: [], datasets: [{ label: "Energy histogram", data: [] }] },
+        data: { labels: [], datasets: [{ label: "Energy histogram (kJ/mol)", data: [] }] },
         options: { animation: false }
     });
 
-    const R = 0.0083145;      // kJ/mol/K
-    const Rj = 8.3145;        // J/mol/K
+    const R = 0.0083145;   // kJ/mol/K
+    const Rj = 8.3145;     // J/mol/K
     const kB = 1.380649e-23;
 
     let state = null;
@@ -47,7 +47,7 @@ function createMCSimulation(box) {
         const s12 = s6*s6;
 
         return {
-            en: 4 * eps * (s12 - s6),        // dimensionless (K)
+            en: 4 * eps * (s12 - s6),   // K units
             xi: 24 * eps * (2*s12 - s6)
         };
     }
@@ -106,9 +106,10 @@ function createMCSimulation(box) {
             step: 0,
             eqStart: Math.floor(0.2*p.maxSteps),
 
-            sumE: 0,
-            sumE2: 0,
-            sumP: 0,
+            // Welford variables (numerically stable!)
+            meanE: 0,
+            M2E: 0,
+            meanP: 0,
             count: 0,
 
             hist: [],
@@ -117,7 +118,7 @@ function createMCSimulation(box) {
             pcoef: kB/(p.T*(p.boxSize**3*1e-27)),
             pid: 0.01*p.N*kB*p.T/(p.boxSize**3*1e-27),
 
-            sampleEvery: Math.max(1, Math.floor(p.maxSteps / 300)) // ~300 points max
+            sampleEvery: Math.max(1, Math.floor(p.maxSteps / 300))
         };
     }
 
@@ -156,14 +157,17 @@ function createMCSimulation(box) {
 
         if (s.step < s.eqStart) return;
 
-        const E_dim = s.energy;              // K units
-        const E = R * E_dim;                 // kJ/mol
+        const E_dim = s.energy;           // K
+        const E = R * E_dim;              // kJ/mol
         const P = s.xi*s.pcoef + s.pid;
 
-        s.sumE += E_dim;
-        s.sumE2 += E_dim*E_dim;
-        s.sumP += P;
+        // Welford update (stable variance!)
         s.count++;
+        const delta = E_dim - s.meanE;
+        s.meanE += delta / s.count;
+        s.M2E += delta * (E_dim - s.meanE);
+
+        s.meanP += (P - s.meanP) / s.count;
 
         s.hist.push(E);
 
@@ -178,12 +182,13 @@ function createMCSimulation(box) {
 
     function finalize(s) {
 
-        const avgE = R * (s.sumE / s.count);
-        const avgP = s.sumP / s.count;
+        const avgE = R * s.meanE;
+        const avgP = s.meanP;
 
-        // 🔥 CORRECT Cv (fluctuation formula)
-        const varE = (s.sumE2/s.count - (s.sumE/s.count)**2);
-        const cv_real = (Rj * varE) / (s.T*s.T);   // J/mol/K
+        const varianceE = s.M2E / (s.count - 1);
+
+        // ✅ OPTION A (correct, intensive, MC-consistent)
+        const cv_real = (varianceE / (s.N * s.T * s.T)) * Rj;
 
         const cv_ideal = 1.5 * Rj;
         const cv_total = cv_ideal + cv_real;
