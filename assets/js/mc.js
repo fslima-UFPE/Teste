@@ -238,3 +238,37 @@ function createMCSimulation(box) {
 
     return { run };
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    document.querySelectorAll(".toolbox").forEach(box => {
+        if (box.id !== "mc-tool") return;
+
+        const sim = createMCSimulation(box);
+
+        const speciesDB = {
+            Xe: { eps: 218.18, sig: 4.055 },
+            Ar: { eps: 116.81, sig: 3.401 },
+            Ne: { eps: 36.831, sig: 2.775 },
+            He: { eps: 5.465, sig: 2.628 },
+            HS: { eps: 0.0001, sig: 4.0 },
+            IG: { eps: 0.000001, sig: 1.0 }
+        };
+
+        box.querySelector(".jsbox-btn-primary").addEventListener("click", () => {
+
+            const selected = box.querySelector(".species").value;
+
+            sim.run({
+                N: parseInt(box.querySelector(".npart").value),
+                boxSize: parseFloat(box.querySelector(".box").value),
+                T: parseFloat(box.querySelector(".temp").value),
+                dx: parseFloat(box.querySelector(".dx").value),
+                maxSteps: parseInt(box.querySelector(".steps").value),
+                species: speciesDB[selected]
+            });
+
+        });
+    });
+
+});
