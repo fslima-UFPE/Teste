@@ -59,7 +59,6 @@ Vou ver se funciona.
               <option value="IG">Ideal Gas</option>
             </select>
           </div>
-
         </div>
 
         <div style="display:flex;align-items:flex-end;">
@@ -72,15 +71,22 @@ Vou ver se funciona.
     <!-- VISUALIZATION -->
     <div class="jsbox-vis-layout">
 
+      <!-- LEFT: PARTICLES -->
       <div class="jsbox-vis-left">
         <div class="jsbox-card">
           <div class="jsbox-card-header">Particles</div>
           <div class="jsbox-card-body">
-            <canvas width="300" height="300"></canvas>
+
+            <!-- ✅ FIXED: container added -->
+            <div class="jsbox-canvas-container">
+              <canvas width="300" height="300"></canvas>
+            </div>
+
           </div>
         </div>
       </div>
 
+      <!-- RIGHT: CHARTS -->
       <div class="jsbox-vis-right">
 
         <div class="jsbox-card">
