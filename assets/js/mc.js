@@ -1,18 +1,31 @@
 function createMCSimulation(box) {
 
-    const canvas = box.querySelector(".jsbox-canvas-container canvas");
-    const ctx = canvas.getContext("2d");
-
     const energyChart = new Chart(box.querySelector("#energyChart"), {
         type: "line",
-        data: { labels: [], datasets: [{ label: "Energy (kJ/mol)", data: [], borderWidth: 1 }] },
-        options: { animation: false, scales: { x: { title: { display: true, text: "MC steps" }}}}
+        data: {
+            labels: [],
+            datasets: [{
+                label: "Energy (kJ/mol)",
+                data: [],
+                borderWidth: 2,
+                pointRadius: 0
+            }]
+        },
+        options: { animation: false }
     });
 
     const pressureChart = new Chart(box.querySelector("#pressureChart"), {
         type: "line",
-        data: { labels: [], datasets: [{ label: "Pressure (bar)", data: [], borderWidth: 1 }] },
-        options: { animation: false, scales: { x: { title: { display: true, text: "MC steps" }}}}
+        data: {
+            labels: [],
+            datasets: [{
+                label: "Pressure (bar)",
+                data: [],
+                borderWidth: 2,
+                pointRadius: 0
+            }]
+        },
+        options: { animation: false }
     });
 
     const histChart = new Chart(box.querySelector("#histChart"), {
@@ -21,7 +34,8 @@ function createMCSimulation(box) {
         options: { animation: false }
     });
 
-    const R = 0.0083145;
+    const R = 0.0083145;      // kJ/mol/K
+    const Rj = 8.3145;        // J/mol/K
     const kB = 1.380649e-23;
 
     let state = null;
@@ -33,7 +47,7 @@ function createMCSimulation(box) {
         const s12 = s6*s6;
 
         return {
-            en: 4 * eps * (s12 - s6),
+            en: 4 * eps * (s12 - s6),        // dimensionless (K)
             xi: 24 * eps * (2*s12 - s6)
         };
     }
@@ -50,21 +64,17 @@ function createMCSimulation(box) {
         return Math.sqrt(dx*dx+dy*dy+dz*dz);
     }
 
-    function initSimulation(params) {
-
-        const { N, boxSize, T, dx, maxSteps, species } = params;
+    function initSimulation(p) {
 
         const positions = [];
-        const types = [];
-
-        const ngrid = Math.ceil(Math.cbrt(N));
-        const spacing = boxSize / ngrid;
+        const ngrid = Math.ceil(Math.cbrt(p.N));
+        const spacing = p.boxSize / ngrid;
 
         let count = 0;
-        for (let x=0; x<ngrid; x++) {
-            for (let y=0; y<ngrid; y++) {
-                for (let z=0; z<ngrid; z++) {
-                    if (count >= N) break;
+        for (let x=0;x<ngrid;x++){
+            for (let y=0;y<ngrid;y++){
+                for (let z=0;z<ngrid;z++){
+                    if (count >= p.N) break;
 
                     positions.push([
                         (x+0.5)*spacing,
@@ -72,7 +82,6 @@ function createMCSimulation(box) {
                         (z+0.5)*spacing
                     ]);
 
-                    types.push(0); // single species for now
                     count++;
                 }
             }
@@ -81,10 +90,10 @@ function createMCSimulation(box) {
         let energy = 0;
         let xi = 0;
 
-        for (let i=0;i<N;i++){
-            for (let j=i+1;j<N;j++){
-                const dr = dist(positions[i], positions[j], boxSize);
-                const res = LJ(dr, species.eps, species.sig);
+        for (let i=0;i<p.N;i++){
+            for (let j=i+1;j<p.N;j++){
+                const dr = dist(positions[i], positions[j], p.boxSize);
+                const res = LJ(dr, p.species.eps, p.species.sig);
                 energy += res.en;
                 xi += res.xi;
             }
@@ -92,35 +101,33 @@ function createMCSimulation(box) {
 
         return {
             positions,
-            types,
             energy,
             xi,
             step: 0,
-            maxSteps,
-            T,
-            dx,
-            box: boxSize,
-            N,
-            pcoef: kB/(T*(boxSize**3*1e-27)),
-            pid: 0.01*N*kB*T/(boxSize**3*1e-27),
-            eqStart: Math.floor(0.2*maxSteps),
+            eqStart: Math.floor(0.2*p.maxSteps),
 
             sumE: 0,
             sumE2: 0,
             sumP: 0,
             count: 0,
 
-            hist: []
+            hist: [],
+
+            ...p,
+            pcoef: kB/(p.T*(p.boxSize**3*1e-27)),
+            pid: 0.01*p.N*kB*p.T/(p.boxSize**3*1e-27),
+
+            sampleEvery: Math.max(1, Math.floor(p.maxSteps / 300)) // ~300 points max
         };
     }
 
-    function mcStep(s, species) {
+    function mcStep(s) {
 
         const i = Math.floor(Math.random()*s.N);
-        const oldPos = [...s.positions[i]];
+        const old = [...s.positions[i]];
 
-        let newPos = oldPos.map(v => v + (Math.random()-0.5)*s.dx);
-        newPos = newPos.map(v => (v+s.box)%s.box);
+        let newPos = old.map(v => v + (Math.random()-0.5)*s.dx);
+        newPos = newPos.map(v => (v+s.boxSize)%s.boxSize);
 
         let dE = 0;
         let dXi = 0;
@@ -128,11 +135,11 @@ function createMCSimulation(box) {
         for (let j=0;j<s.N;j++){
             if (j===i) continue;
 
-            let drOld = dist(oldPos, s.positions[j], s.box);
-            let drNew = dist(newPos, s.positions[j], s.box);
+            const drOld = dist(old, s.positions[j], s.boxSize);
+            const drNew = dist(newPos, s.positions[j], s.boxSize);
 
-            const oldRes = LJ(drOld, species.eps, species.sig);
-            const newRes = LJ(drNew, species.eps, species.sig);
+            const oldRes = LJ(drOld, s.species.eps, s.species.sig);
+            const newRes = LJ(drNew, s.species.eps, s.species.sig);
 
             dE += newRes.en - oldRes.en;
             dXi += newRes.xi - oldRes.xi;
@@ -147,18 +154,20 @@ function createMCSimulation(box) {
 
     function updateStats(s) {
 
-        if (s.step >= s.eqStart) {
+        if (s.step < s.eqStart) return;
 
-            const E = R*s.energy;
-            const P = s.xi*s.pcoef + s.pid;
+        const E_dim = s.energy;              // K units
+        const E = R * E_dim;                 // kJ/mol
+        const P = s.xi*s.pcoef + s.pid;
 
-            s.sumE += E;
-            s.sumE2 += E*E;
-            s.sumP += P;
-            s.count++;
+        s.sumE += E_dim;
+        s.sumE2 += E_dim*E_dim;
+        s.sumP += P;
+        s.count++;
 
-            s.hist.push(E);
+        s.hist.push(E);
 
+        if (s.step % s.sampleEvery === 0) {
             energyChart.data.labels.push(s.step);
             energyChart.data.datasets[0].data.push(E);
 
@@ -167,30 +176,24 @@ function createMCSimulation(box) {
         }
     }
 
-    function drawParticles(s) {
-
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-
-        const scale = canvas.width / s.box;
-
-        for (let p of s.positions) {
-            ctx.beginPath();
-            ctx.arc(p[0]*scale, p[1]*scale, 3, 0, 2*Math.PI);
-            ctx.fill();
-        }
-    }
-
     function finalize(s) {
 
-        const avgE = s.sumE / s.count;
+        const avgE = R * (s.sumE / s.count);
         const avgP = s.sumP / s.count;
 
-        const cv = (s.sumE2/s.count - avgE*avgE)/(s.N*R*s.T*s.T);
+        // 🔥 CORRECT Cv (fluctuation formula)
+        const varE = (s.sumE2/s.count - (s.sumE/s.count)**2);
+        const cv_real = (Rj * varE) / (s.T*s.T);   // J/mol/K
+
+        const cv_ideal = 1.5 * Rj;
+        const cv_total = cv_ideal + cv_real;
 
         box.querySelector(".results").innerHTML =
             `⟨E⟩ = ${avgE.toFixed(2)} kJ/mol |
-             ⟨P⟩ = ${avgP.toFixed(2)} bar |
-             Cv = ${cv.toFixed(2)} J/mol·K`;
+             ⟨P⟩ = ${avgP.toFixed(2)} bar <br>
+             Cv(real) = ${cv_real.toFixed(2)} |
+             Cv(ideal) = ${cv_ideal.toFixed(2)} |
+             Cv(total) = ${cv_total.toFixed(2)} J/mol·K`;
 
         // histogram
         const bins = 30;
@@ -215,15 +218,14 @@ function createMCSimulation(box) {
 
         energyChart.data.labels = [];
         energyChart.data.datasets[0].data = [];
+
         pressureChart.data.labels = [];
         pressureChart.data.datasets[0].data = [];
-        histChart.data.labels = [];
-        histChart.data.datasets[0].data = [];
 
         function loop() {
 
-            for (let i=0;i<50;i++) {  // MANY MC steps per frame
-                mcStep(state, params.species);
+            for (let i=0;i<200;i++) {
+                mcStep(state);
                 state.step++;
                 updateStats(state);
 
@@ -233,7 +235,6 @@ function createMCSimulation(box) {
                 }
             }
 
-            drawParticles(state);
             energyChart.update();
             pressureChart.update();
 
@@ -264,15 +265,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         box.querySelector(".jsbox-btn-primary").addEventListener("click", () => {
 
-            const selected = box.querySelector(".species").value;
-
             sim.run({
                 N: parseInt(box.querySelector(".npart").value),
                 boxSize: parseFloat(box.querySelector(".box").value),
                 T: parseFloat(box.querySelector(".temp").value),
                 dx: parseFloat(box.querySelector(".dx").value),
                 maxSteps: parseInt(box.querySelector(".steps").value),
-                species: speciesDB[selected]
+                species: speciesDB[box.querySelector(".species").value]
             });
 
         });
