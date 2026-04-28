@@ -8,27 +8,15 @@ subtitle: LJ particles
 Vou ver se funciona.
 </p>
 
-<div class="toolbox" id="mc-lj-tool">
+<div class="toolbox" id="mc-tool">
+
   <div class="toolbox-header">
-    <h2 class="toolbox-title">Monte Carlo Lennard-Jones (3D)</h2>
-    <p class="toolbox-subtitle">Interactive simulation</p>
+    <h2 class="toolbox-title">Monte Carlo Simulation (Lennard-Jones)</h2>
   </div>
 
   <div class="toolbox-content">
-    <div class="jsbox-input-row">
-      <label>Particle</label>
-      <select class="jsbox-input" id="ptype">
-        <option>Xe</option>
-        <option>Ar</option>
-        <option>Ne</option>
-        <option>He</option>
-        <option>Kr</option>
-        <option>HS</option>
-        <option>IG</option>
-      </select>
-    </div>
-    
-    <!-- Controls -->
+
+    <!-- CONTROLS -->
     <div class="jsbox-control-panel">
       <div class="jsbox-controls-grid">
 
@@ -36,46 +24,59 @@ Vou ver se funciona.
           <div class="jsbox-col-title sys">System</div>
 
           <div class="jsbox-input-row">
-            <label>N particles</label>
-            <input class="jsbox-input" id="np" type="number" value="50">
+            <label>N</label>
+            <input type="number" class="jsbox-input npart" value="60">
           </div>
 
           <div class="jsbox-input-row">
             <label>Box (Å)</label>
-            <input class="jsbox-input" id="box" type="number" value="30">
+            <input type="number" class="jsbox-input box" value="50">
           </div>
 
           <div class="jsbox-input-row">
-            <label>Temperature (K)</label>
-            <input class="jsbox-input" id="temp" type="number" value="300">
+            <label>T (K)</label>
+            <input type="number" class="jsbox-input temp" value="300">
           </div>
 
           <div class="jsbox-input-row">
             <label>dx (Å)</label>
-            <input class="jsbox-input" id="dx" type="number" value="1">
+            <input type="number" class="jsbox-input dx" value="5">
+          </div>
+
+          <div class="jsbox-input-row">
+            <label>Steps</label>
+            <input type="number" class="jsbox-input steps" value="200000">
+          </div>
+
+          <div class="jsbox-input-row">
+            <label>Species</label>
+            <select class="jsbox-input species">
+              <option value="Xe">Xe</option>
+              <option value="Ar">Ar</option>
+              <option value="Ne">Ne</option>
+              <option value="He">He</option>
+              <option value="HS">Hard Sphere</option>
+              <option value="IG">Ideal Gas</option>
+            </select>
           </div>
 
         </div>
 
-        <div>
-          <div class="jsbox-col-title opt">Run</div>
-
-          <button class="jsbox-btn jsbox-btn-primary" id="startBtn">Start</button>
-          <button class="jsbox-btn jsbox-btn-success" id="stepBtn">Step</button>
-
+        <div style="display:flex;align-items:flex-end;">
+          <button class="jsbox-btn jsbox-btn-primary">Run Simulation</button>
         </div>
 
       </div>
     </div>
 
-    <!-- Visualization -->
+    <!-- VISUALIZATION -->
     <div class="jsbox-vis-layout">
 
       <div class="jsbox-vis-left">
         <div class="jsbox-card">
           <div class="jsbox-card-header">Particles</div>
           <div class="jsbox-card-body">
-            <canvas id="mcCanvas" class="jsbox-canvas-container"></canvas>
+            <canvas width="300" height="300"></canvas>
           </div>
         </div>
       </div>
@@ -96,11 +97,21 @@ Vou ver se funciona.
           </div>
         </div>
 
+        <div class="jsbox-card">
+          <div class="jsbox-card-header">Energy Histogram</div>
+          <div class="jsbox-card-body">
+            <canvas id="histChart" class="jsbox-chart"></canvas>
+          </div>
+        </div>
+
       </div>
 
     </div>
 
-    <div class="jsbox-alert" id="status">Idle</div>
+    <!-- RESULTS -->
+    <div class="jsbox-alert results">
+      Results will appear here
+    </div>
 
   </div>
 </div>
