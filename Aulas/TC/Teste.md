@@ -62,30 +62,17 @@ Vou ver se funciona.
         </div>
 
         <div style="display:flex;align-items:flex-end;">
-          <button class="jsbox-btn jsbox-btn-primary">Run Simulation</button>
+          <button class="jsbox-btn jsbox-btn-primary">
+            Run Simulation
+          </button>
         </div>
 
       </div>
     </div>
 
-    <!-- VISUALIZATION -->
+    <!-- VISUALIZATION (ONLY GRAPHS NOW) -->
     <div class="jsbox-vis-layout">
 
-      <!-- LEFT: PARTICLES -->
-      <div class="jsbox-vis-left">
-        <div class="jsbox-card">
-          <div class="jsbox-card-header">Particles</div>
-          <div class="jsbox-card-body">
-
-            <div class="jsbox-canvas-container">
-              <canvas width="300" height="300"></canvas>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT: CHARTS -->
       <div class="jsbox-vis-right">
 
         <div class="jsbox-card">
