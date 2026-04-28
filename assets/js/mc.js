@@ -182,38 +182,63 @@ function createMCSimulation(box) {
 
     function finalize(s) {
 
-        const avgE = R * s.meanE;
-        const avgP = s.meanP;
+        const avgE = s.sumE / s.count;
+        const avgP = s.sumP / s.count;
+        const avgE2 = s.sumE2 / s.count;
 
-        const varianceE = s.M2E / (s.count - 1);
-
-        // ✅ OPTION A (correct, intensive, MC-consistent)
-        const cv_real = (varianceE / (s.N * s.T * s.T)) * Rj;
-
-        const cv_ideal = 1.5 * Rj;
-        const cv_total = cv_ideal + cv_real;
+        const cvm = (avgE2 - avgE * avgE) / (s.N * R * s.T * s.T) * 1000;
+        const cvid = 1.5 * R * 1000;
 
         box.querySelector(".results").innerHTML =
             `⟨E⟩ = ${avgE.toFixed(2)} kJ/mol |
-             ⟨P⟩ = ${avgP.toFixed(2)} bar <br>
-             Cv(real) = ${cv_real.toFixed(2)} |
-             Cv(ideal) = ${cv_ideal.toFixed(2)} |
-             Cv(total) = ${cv_total.toFixed(2)} J/mol·K`;
+             ⟨P⟩ = ${avgP.toFixed(2)} bar |
+             Cv = ${(cvm + cvid).toFixed(2)} J/(K·mol) 
+             (real: ${cvm.toFixed(2)} J/(K·mol))`;
 
-        // histogram
-        const bins = 30;
-        const min = Math.min(...s.hist);
-        const max = Math.max(...s.hist);
+        const data = s.hist;
+        if (data.length < 10) {
+            console.warn("Histogram skipped (not enough data)");
+            return;
+        }
+
+        const bins = 40;
+
+        let min = data[0];
+        let max = data[0];
+
+        for (let i = 1; i < data.length; i++) {
+            if (data[i] < min) min = data[i];
+            if (data[i] > max) max = data[i];
+        }
+    
+        if (Math.abs(max - min) < 1e-10) {
+            max = min + 1e-6;
+        }
 
         const hist = new Array(bins).fill(0);
 
-        s.hist.forEach(v=>{
-            const i = Math.floor((v-min)/(max-min)*bins);
-            hist[Math.min(i,bins-1)]++;
-        });
+        for (let i = 0; i < data.length; i++) {
+            let idx = Math.floor((data[i] - min) / (max - min) * bins);
 
-        histChart.data.labels = hist.map((_,i)=>i);
-        histChart.data.datasets[0].data = hist;
+            if (idx < 0) idx = 0;
+            if (idx >= bins) idx = bins - 1;
+
+            hist[idx]++;
+        }
+    
+        const total = data.length;
+        const histNorm = hist.map(v => v / total);
+
+        const labels = [];
+        for (let i = 0; i < bins; i++) {
+            labels.push(
+                (min + (i + 0.5) * (max - min) / bins).toFixed(2)
+        );
+        }
+    
+        histChart.data.labels = labels;
+        histChart.data.datasets[0].data = histNorm;
+
         histChart.update();
     }
 
