@@ -367,16 +367,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
         box.querySelector(".jsbox-btn-primary").addEventListener("click", () => {
 
-            sim.run({
-                N: parseInt(box.querySelector(".npart").value),
-                boxSize: parseFloat(box.querySelector(".box").value),
-                T: parseFloat(box.querySelector(".temp").value),
-                dx: box.querySelector(".dx") 
-                    ? parseFloat(box.querySelector(".dx").value)
-                    : undefined,
-                maxSteps: parseInt(box.querySelector(".steps").value),
-                species: speciesDB[box.querySelector(".species").value]
-            });
+        const speciesType = box.querySelector(".species").value;
+
+        const base = speciesDB[speciesType];
+        let species = { ...base };
+
+        // ✅ THIS is what you're missing
+        if (speciesType === "HS") {
+            species.sig = parseFloat(box.querySelector(".sigma").value);
+        }
+
+        sim.run({
+            N: parseInt(box.querySelector(".npart").value),
+            boxSize: parseFloat(box.querySelector(".box").value),
+            T: parseFloat(box.querySelector(".temp").value),
+            dx: box.querySelector(".dx") 
+                ? parseFloat(box.querySelector(".dx").value)
+                : undefined,
+            maxSteps: parseInt(box.querySelector(".steps").value),
+            species: species   // ← use modified object
+        });
 
         });
     });
