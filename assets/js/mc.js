@@ -369,21 +369,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
         box.querySelector(".jsbox-btn-primary").addEventListener("click", () => {
 
-        const speciesType = box.querySelector(".species").value;
+    const speciesType = box.querySelector(".species").value;
 
-        // 1. copy base species
-        const base = speciesDB[speciesType];
-        let species = { ...base };
+    const base = speciesDB[speciesType];
+    let species = { ...base };
 
-        // 2. 🔥 THIS is where your snippet goes
-        const sigmaInput = box.querySelector(".sigma");
+    // ✅ read sigma from UI
+    const sigmaInput = box.querySelector(".sigma");
 
-        if (sigmaInput && !isNaN(parseFloat(sigmaInput.value))) {
-            species.sig = parseFloat(sigmaInput.value);
-        }
+    if (sigmaInput && !isNaN(parseFloat(sigmaInput.value))) {
+        species.sig = parseFloat(sigmaInput.value);
+    }
 
-        // 3. run simulation
-        sim.run({
+    console.log("Species sent to sim:", species); // DEBUG
+
+    sim.run({
         N: parseInt(box.querySelector(".npart").value),
         boxSize: parseFloat(box.querySelector(".box").value),
         T: parseFloat(box.querySelector(".temp").value),
@@ -391,10 +391,10 @@ document.addEventListener("DOMContentLoaded", () => {
             ? parseFloat(box.querySelector(".dx").value)
             : undefined,
         maxSteps: parseInt(box.querySelector(".steps").value),
-        species: species   // ✅ use modified object
-        });
+        species: species
+    });
 
-      });
+});
     });
 
 });
