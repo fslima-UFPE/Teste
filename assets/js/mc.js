@@ -155,42 +155,38 @@ function createMCSimulation(box) {
         if (s.step < s.eqStart) return;
 
         let E = 0;
-        let P = 0;
+let P = 0;
 
-        if (s.species.type === "IG") {
+if (IG) {
+    P = s.pid;
 
-            P = s.pid;
+} else if (HS) {
 
-        } else if (s.species.type === "HS") {
+    const sigma = s.species.sig; // ✅ FIXED
+    const rho = s.N / s.V;
 
-            const sigma = s.species.sig;
-            const rho = s.N / s.V;
+    s.eta = (Math.PI / 6) * rho * sigma**3;
+    s.Z = (1 + s.eta + s.eta**2 - s.eta**3) / (1 - s.eta)**3;
 
-            s.eta = (Math.PI / 6) * rho * sigma**3;
+    P = s.pid * s.Z;
 
-            s.Z = (1 + s.eta + s.eta**2 - s.eta**3) / (1 - s.eta)**3;
-
-            // compute pressure DIRECTLY (Pa → bar)
-            P = s.pid * s.Z;
-
-        } else { // LJ
+} else { // LJ
 
     const E_dim = s.energy;
     E = R * E_dim;
 
     P = s.xi * s.pcoef + s.pid;
 
-    // ✅ update stats ONLY here and consistently
-    s.count++;
-
     const delta = E_dim - s.meanE;
-    s.meanE += delta / s.count;
+    s.meanE += delta / (s.count + 1);
     s.M2E += delta * (E_dim - s.meanE);
-
-    s.meanP += (P - s.meanP) / s.count;
 }
 
-        s.hist.push(E);
+// ✅ COMMON UPDATE (ALL MODELS)
+s.count++;
+s.meanP += (P - s.meanP) / s.count;
+
+s.hist.push(E);
 
         if (s.step % s.sampleEvery === 0) {
             energyChart.data.labels.push(s.step);
