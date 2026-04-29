@@ -182,6 +182,27 @@ function createMCSimulation(box) {
 
         if (s.step < s.eqStart) return;
 
+        if (s.species.type === "HS" || s.species.type === "IG") {
+        // enforce constant values explicitly
+            const E = 0;
+            const P = s.pid;
+
+            if (s.step % s.sampleEvery === 0) {
+                energyChart.data.labels.push(s.step);
+                energyChart.data.datasets[0].data.push(E);
+
+                pressureChart.data.labels.push(s.step);
+                pressureChart.data.datasets[0].data.push(P);
+            }
+
+            s.hist.push(E);
+
+            s.count++;
+            s.meanP += (P - s.meanP) / s.count;
+
+            return; // skip LJ-based stats
+        }
+
         const E_dim = s.energy;           // K
         const E = R * E_dim;              // kJ/mol
         const P = s.xi*s.pcoef + s.pid;
@@ -210,7 +231,7 @@ function createMCSimulation(box) {
         const avgE = R * s.meanE;
         const avgP = s.meanP;
 
-        const varianceE = s.M2E / (s.count - 1);
+        const varianceE = (s.count > 1) ? s.M2E / (s.count - 1) : 0;
 
         // ✅ OPTION A (correct, intensive, MC-consistent)
         const cv_real = (varianceE / (s.N * s.T * s.T)) * Rj;
