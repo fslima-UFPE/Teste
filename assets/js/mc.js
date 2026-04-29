@@ -93,9 +93,11 @@ function createMCSimulation(box) {
         for (let i=0;i<p.N;i++){
             for (let j=i+1;j<p.N;j++){
                 const dr = dist(positions[i], positions[j], p.boxSize);
-                const res = LJ(dr, p.species.eps, p.species.sig);
-                energy += res.en;
-                xi += res.xi;
+                if (p.species.type === "LJ") {
+                    const res = LJ(dr, p.species.eps, p.species.sig);
+                    energy += res.en;
+                    xi += res.xi;
+                }
             }
         }
 
