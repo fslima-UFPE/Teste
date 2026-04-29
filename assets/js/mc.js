@@ -154,15 +154,16 @@ function createMCSimulation(box) {
 
         if (s.step < s.eqStart) return;
 
-        let E = 0;
+       let E = 0;
 let P = 0;
 
-if (IG) {
+if (s.species.type === "IG") {
+
     P = s.pid;
 
-} else if (HS) {
+} else if (s.species.type === "HS") {
 
-    const sigma = s.species.sig; // ✅ FIXED
+    const sigma = s.species.sig; // Å
     const rho = s.N / s.V;
 
     s.eta = (Math.PI / 6) * rho * sigma**3;
