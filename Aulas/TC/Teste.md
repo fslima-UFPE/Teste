@@ -59,7 +59,15 @@ Vou ver se funciona.
               <option value="IG">Gás Ideal</option>
             </select>
           </div>
-        </div>
+
+          
+          <div class="jsbox-input-row">
+            <label>sigma (Å)</label>
+            <input type="number" class="jsbox-input sigma" value="4">
+          </div>
+
+          
+        </div>      
 
         <div style="display:flex;align-items:flex-end;">
           <button class="jsbox-btn jsbox-btn-primary">
