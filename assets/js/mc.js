@@ -90,6 +90,8 @@ function createMCSimulation(box) {
             xi,
             step: 0,
             eqStart: Math.floor(0.2*p.maxSteps),
+            eta: 0,
+            Z:1,        
 
             meanE: 0,
             M2E: 0,
@@ -164,12 +166,12 @@ function createMCSimulation(box) {
             const sigma = s.species.sig * 1e-10;
             const rho = s.N / s.V;
 
-            const eta = (Math.PI / 6) * rho * sigma**3;
+            s.eta = (Math.PI / 6) * rho * sigma**3;
 
-            const Z = (1 + eta + eta**2 - eta**3) / (1 - eta)**3;
+            s.Z = (1 + eta + eta**2 - eta**3) / (1 - eta)**3;
 
             // compute pressure DIRECTLY (Pa → bar)
-            P = 0.01 * rho * kB * s.T * Z;
+            P = s.pid * s.Z;
 
         } else {
 
@@ -209,6 +211,12 @@ function createMCSimulation(box) {
         const cv_real = (varianceE / (s.N * s.T * s.T)) * Rj;
         const cv_ideal = 1.5 * Rj;
         const cv_total = cv_ideal + cv_real;
+
+        if (s.species.type === "HS") {
+            console.log("FINAL HS VALUES:");
+            console.log("eta =", s.eta);
+            console.log("Z =", s.Z);
+        }
 
         box.querySelector(".results").innerHTML =
             `⟨E⟩ = ${avgE.toFixed(2)} kJ/mol |
