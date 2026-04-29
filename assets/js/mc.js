@@ -66,6 +66,8 @@ function createMCSimulation(box) {
 
     function initSimulation(p) {
 
+        console.log("SIGMA INSIDE SIM:", p.species.sig);
+
         const positions = [];
         const ngrid = Math.ceil(Math.cbrt(p.N));
         const spacing = p.boxSize / ngrid;
