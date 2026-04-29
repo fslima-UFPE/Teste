@@ -153,8 +153,7 @@ function createMCSimulation(box) {
                 }
 
             } else if (s.species.type === "IG") {
-                continue;
-            }
+                continue;            
 
             // no energy, no virial contribution
             } else {
