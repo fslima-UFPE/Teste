@@ -371,26 +371,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const speciesType = box.querySelector(".species").value;
 
+        // 1. copy base species
         const base = speciesDB[speciesType];
         let species = { ...base };
 
-        // ✅ THIS is what you're missing
-        if (speciesType === "HS") {
-            species.sig = parseFloat(box.querySelector(".sigma").value);
+        // 2. 🔥 THIS is where your snippet goes
+        const sigmaInput = box.querySelector(".sigma");
+
+        if (sigmaInput && !isNaN(parseFloat(sigmaInput.value))) {
+            species.sig = parseFloat(sigmaInput.value);
         }
 
+        // 3. run simulation
         sim.run({
-            N: parseInt(box.querySelector(".npart").value),
-            boxSize: parseFloat(box.querySelector(".box").value),
-            T: parseFloat(box.querySelector(".temp").value),
-            dx: box.querySelector(".dx") 
-                ? parseFloat(box.querySelector(".dx").value)
-                : undefined,
-            maxSteps: parseInt(box.querySelector(".steps").value),
-            species: species   // ← use modified object
+        N: parseInt(box.querySelector(".npart").value),
+        boxSize: parseFloat(box.querySelector(".box").value),
+        T: parseFloat(box.querySelector(".temp").value),
+        dx: box.querySelector(".dx") 
+            ? parseFloat(box.querySelector(".dx").value)
+            : undefined,
+        maxSteps: parseInt(box.querySelector(".steps").value),
+        species: species   // ✅ use modified object
         });
 
-        });
+      });
     });
 
 });
