@@ -184,9 +184,12 @@ if (p.species.type === "LJ") {
 
     function updateStats(s) {
 
+        console.log("TYPE:", s.species.type);
+
     if (s.step < s.eqStart) return;
 
-    let E, P;
+    let E = 0;
+    let P = 0;
 
     // =========================
     // IDEAL GAS
@@ -197,7 +200,7 @@ if (p.species.type === "LJ") {
         P = s.pid;
 
     // =========================
-    // HARD SPHERES (Carnahan-Starling)
+    // HARD SPHERES
     // =========================
     } else if (s.species.type === "HS") {
 
@@ -205,14 +208,13 @@ if (p.species.type === "LJ") {
         const sigma = s.species.sig * 1e-10; // m
         const rho = s.N / V;
 
-        const eta = (Math.PI / 6) * rho * Math.pow(sigma, 3);
+        const eta = (Math.PI / 6) * rho * sigma**3;
 
         let Z;
-
-        if (eta >= 0.7) {
-            Z = 50; // cap to avoid divergence explosion
+        if (eta >= 0.6) {
+            Z = 100; // cap to avoid blow-up
         } else {
-            Z = (1 + eta + eta**2 - eta**3) / Math.pow(1 - eta, 3);
+            Z = (1 + eta + eta**2 - eta**3) / (1 - eta)**3;
         }
 
         P = s.pid * Z;
@@ -228,7 +230,7 @@ if (p.species.type === "LJ") {
 
         P = s.xi * s.pcoef + s.pid;
 
-        // Welford energy stats ONLY for LJ
+        // energy stats ONLY for LJ
         s.count++;
         const delta = E_dim - s.meanE;
         s.meanE += delta / s.count;
@@ -236,11 +238,13 @@ if (p.species.type === "LJ") {
     }
 
     // =========================
-    // COMMON (P stats for all)
+    // PRESSURE STATS (ALL MODELS)
     // =========================
 
+    s.meanP += (P - s.meanP) / (s.count + 1);
+
+    // increment count ONLY ONCE
     s.count++;
-    s.meanP += (P - s.meanP) / s.count;
 
     s.hist.push(E);
 
