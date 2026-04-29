@@ -306,7 +306,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 N: parseInt(box.querySelector(".npart").value),
                 boxSize: parseFloat(box.querySelector(".box").value),
                 T: parseFloat(box.querySelector(".temp").value),
-                dx: parseFloat(box.querySelector(".dx").value),
+                dx: (() => {
+                    const el = box.querySelector(".dx");
+                    return el ? parseFloat(el.value) : 5;
+                })(),
                 maxSteps: parseInt(box.querySelector(".steps").value),
                 species: speciesDB[box.querySelector(".species").value]
             });
