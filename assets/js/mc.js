@@ -336,7 +336,6 @@ if (s.step > s.eqStart && s.step % 10 === 0) {
     pressureChart.update();
 
     return;
-}
     }
 
     function loop() {
