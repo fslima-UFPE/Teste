@@ -200,7 +200,6 @@ if (s.step > s.eqStart && s.step % 10 === 0) {
         }
 
         if (s.species.type === "HS") {
-    console.log("HS Z =", s.Z, "eta =", s.eta, "P =", P);
 }
     }
 
