@@ -362,7 +362,6 @@ if (s.step > s.eqStart && s.step % 10 === 0) {
 }
 
     return { run };
-}
 
 
 // ==========================
