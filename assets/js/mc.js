@@ -226,43 +226,45 @@ s.hist.push(E);
 
         const bins = 30;
 
-if (s.hist.length === 0) return;
+    if (s.hist.length === 0) return;
 
-let min = s.hist[0];
-let max = s.hist[0];
+    // SAFE min/max (no stack overflow)
+    let min = s.hist[0];
+    let max = s.hist[0];
 
-for (let i = 1; i < s.hist.length; i++) {
-    if (s.hist[i] < min) min = s.hist[i];
-    if (s.hist[i] > max) max = s.hist[i];
-}
+    for (let i = 1; i < s.hist.length; i++) {
+        if (s.hist[i] < min) min = s.hist[i];
+        if (s.hist[i] > max) max = s.hist[i];
+    }
 
-if (Math.abs(max - min) < 1e-12) {
-    max = min + 1e-6;
-}
+    // avoid zero-width
+    if (Math.abs(max - min) < 1e-12) {
+        max = min + 1e-6;
+    }
 
-const hist = new Array(bins).fill(0);
+    const hist = new Array(bins).fill(0);
 
-for (let v of s.hist) {
+    for (let v of s.hist) {
     let i = Math.floor((v - min) / (max - min) * bins);
     if (i < 0) i = 0;
-    if (i >= bins) i = bins - 1;
-    hist[i]++;
-}
+        if (i >= bins) i = bins - 1;
+        hist[i]++;
+    }
 
-const total = s.hist.length;
-const histNorm = hist.map(v => v / total);
+    const total = s.hist.length;
+    const histNorm = hist.map(v => v / total);
 
-const labels = [];
-for (let i = 0; i < bins; i++) {
-    labels.push(
-        (min + (i + 0.5)*(max - min)/bins).toFixed(2)
-    );
-}
+    const labels = [];
+    for (let i = 0; i < bins; i++) {
+        labels.push(
+            (min + (i + 0.5)*(max - min)/bins).toFixed(2)
+        );
+    }
 
-histChart.data.labels = labels;
-histChart.data.datasets[0].data = histNorm;
+    histChart.data.labels = labels;
+    histChart.data.datasets[0].data = histNorm;
 
-histChart.update();
+    histChart.update();
     }
 
     function run(params) {
